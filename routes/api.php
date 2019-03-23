@@ -12,8 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix('/v1')->group(['middleware'=>'checkApi'],function(){
-    Route::get('/2','Api\BaseController@index');
+Route::prefix('/v1')->group(function(){
+    Route::get('/2','Api\BaseController@index')->middleware('apiauth');
 
 });
 //获取验证令牌
