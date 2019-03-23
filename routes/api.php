@@ -12,8 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix('/v1')->group(function(){
+Route::prefix('/v1')->group(['middleware'=>'apiauth:checkAuth'],function(){
 
-})->middleware('apiauth:checkAuth');
+});
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
