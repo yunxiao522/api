@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 Route::prefix('/v1')->group(function(){
-    Route::middleware("apiauth::checkAuth")->group([
-        '/3'=>function(){return 3;},
-    ]);
+    Route::middleware("apiauth::checkAuth")->namespace('base',function (){
+        return 1;
+    });
     Route::get('/2',function (){
         return 2;
     });
