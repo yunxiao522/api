@@ -92,7 +92,7 @@ class Response extends BaseController
      * Description 设置消息的返回头部code信息
      */
     public static function setHeaderCode($code = 200 ,$msg = 'OK'){
-        header("HTTP/1.1 $code $msg");
+//        header("HTTP/1.1 $code $msg");
     }
 
     /**
