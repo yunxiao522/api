@@ -13,7 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 Route::prefix('/v1')->group(function(){
-    Route::middleware("apiauth::checkAuth")->get('/2',function (){
+    Route::middleware("apiauth::checkAuth")->group(function (){
+        Route::get('/3',function (){
+            return 3;
+        });
+    });
+    Route::get('/2',function (){
         return 2;
     });
 });
