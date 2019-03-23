@@ -13,8 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::prefix('/v1')->group(function(){
-    \App\Http\Middleware\ApiAuth::checkAuth();
 
-});
+})->middleware('apiauth:checkAuth');
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
