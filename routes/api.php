@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 Route::prefix('/v1')->group(function(){
     Route::get('/2','Api\BaseController@index');
+
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
