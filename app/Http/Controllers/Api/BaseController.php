@@ -19,4 +19,8 @@ class BaseController extends Controller
     {
         $this->method = $request->method();
     }
+
+    public function index(){
+        return 1;
+    }
 }
