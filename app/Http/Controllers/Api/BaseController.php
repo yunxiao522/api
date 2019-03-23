@@ -22,5 +22,6 @@ class BaseController extends Controller
 
     public function index(){
         Response::success('');
+
     }
 }
