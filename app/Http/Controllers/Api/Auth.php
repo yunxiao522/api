@@ -74,7 +74,6 @@ class Auth extends BaseController
      *Description 验证认证信息
      */
     public static function checkAuth(){
-        dump(1);
         $request = new Request();
         $token = $request->input('token');
         if(empty($token) || empty(Redis::get($token))){
