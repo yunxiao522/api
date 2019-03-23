@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix('/v1')->group(['middleware'=>'apiauth:checkAuth'],function(){
+Route::prefix('/v1')->group(['middleware'=>'apiauth'],function(){
 
 });
 //获取验证令牌
