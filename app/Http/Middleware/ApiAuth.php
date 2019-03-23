@@ -12,7 +12,8 @@ use Closure;
 
 class ApiAuth extends Auth
 {
-    public function handle(){
+    public function handle($request, Closure $next, $role)
+    {
 
     }
 }
