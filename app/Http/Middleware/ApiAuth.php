@@ -12,8 +12,5 @@ use Closure;
 
 class ApiAuth extends Auth
 {
-    public function handle($request, Closure $next)
-    {
-        self::checkAuth();
-    }
+
 }
