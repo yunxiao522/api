@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 Route::prefix('/v1')->group(function(){
-    Route::get('/2','Api\BaseController@index')->middleware('apiauth');
+    Route::get('/2',function (){
+
+    })->middleware('apiauth');
 
 });
 //获取验证令牌
