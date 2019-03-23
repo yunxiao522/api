@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::prefix('/v1')->group(function(){
+Route::prefix('/v1')->group(['middleware'=>'checkApi'],function(){
     Route::get('/2','Api\BaseController@index');
 
 });
