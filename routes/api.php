@@ -16,9 +16,7 @@ Route::prefix('/v1')->group(function(){
     Route::middleware("apiauth::checkAuth")->namespace('base',function (){
         return 1;
     });
-    Route::get('/2',function (){
-        return 2;
-    });
+    Route::get('/2');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
