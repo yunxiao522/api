@@ -26,6 +26,6 @@ class Base extends Model
      * Description 查找单条数据
      */
     public static function getOne($where ,$field = '*'){
-        return self::where($where)->first($field)->get()[0];
+        return self::where($where)->first($field)->get();
     }
 }
