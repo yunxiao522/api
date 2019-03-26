@@ -12,14 +12,17 @@ use App\Model\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class ArticleController
+class ArticleController extends BaseController
 {
     public $request;
     public function __construct(Request $request)
     {
-        $this->request = $request;
+        parent::__construct($request);
     }
 
+    /**
+     * Description 获取文档标题
+     */
     public function getTitle(){
         $id = $this->request->route('id');
         $title = Article::getField(['id'=>$id],'title');

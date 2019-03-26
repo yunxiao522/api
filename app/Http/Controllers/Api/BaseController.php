@@ -15,12 +15,10 @@ use Illuminate\Http\Request;
 class BaseController extends Controller
 {
     private $method;
+    public $request;
     public function __construct(Request $request)
     {
-        $this->method = $request->method();
+        $this->request = $request;
     }
 
-    public function index(){
-        Response::success('');
-    }
 }
