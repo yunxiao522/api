@@ -16,8 +16,9 @@ class Base extends Model
     public $table;
     private $cache_ttl = 600;
     public $primaryKey = 'id';
+    private static $pk = 'id';
     public $timestamps = false;
-    public $limit = 20;
+    public static $limit = 20;
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -97,7 +98,7 @@ class Base extends Model
      * Description 统计符合条件的条数
      */
     public static function getCount($where,$field = ''){
-        $field = empty($field) ? self::$primaryKey : $field;
+        $field = empty($field) ? self::$pk : $field;
         return self::where($where)->count($field);
     }
 
