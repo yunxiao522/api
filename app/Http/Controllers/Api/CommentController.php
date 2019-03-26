@@ -29,7 +29,7 @@ class CommentController extends BaseController
         $limit = $this->request->route('limit') && $this->request->route('limit') <= $this->limit?$this->request->route('limit'):$this->limit;
         $list = Comment::getList([
             'status'=>1,
-            'article_id'=>$id
+            'aid'=>$id
         ],'*',[$page,$limit],'create_time,desc');
         return Response::success($list);
     }
