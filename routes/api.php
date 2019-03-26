@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use App\Model\Article;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,7 +20,7 @@ Route::prefix('/v1')->group(function(){
     Route::post('/visit','Api\Visit@visit');
     //获取文档标题
     Route::get('/getArticleTitle/{id}',function ($id){
-        return \App\Model\Article::getField(['id'=>$id],'title');
+        return Article::getField(['id'=>$id],'title');
     });
 });
 //获取验证令牌
