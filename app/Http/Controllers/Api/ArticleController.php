@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Model\Article as A;
+use App\Model\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +22,7 @@ class ArticleController
 
     public function getTitle(){
         $id = $this->request->route('id');
-        $title = A::getField(['id'=>$id],'title');
+        $title = Article::getField(['id'=>$id],'title');
         return Response::success(['title'=>$title]);
     }
 }
