@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Model\Article;
+use App\Model\Column;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +28,54 @@ class ArticleController extends BaseController
         $id = $this->request->route('id');
         $title = Article::getField(['id'=>$id],'title');
         return Response::success(['title'=>$title]);
+    }
+
+    /**
+     * @return false|string
+     * Description 获取文档列表数据
+     */
+    public function getList()
+    {
+        $type = $this->request->type;
+        if (empty($type)) {
+            $type = 'undefined';
+        }
+        //组合查询条件
+        if ($type != "undefined") {
+            if ($type == 24) {
+                $column_arr = Column::getAll(['parent_id' => $type], 'id');
+                $column_arr = array_column($column_arr, 'id');
+                array_push($column_arr, 24);
+                $where = [
+                    'column_id' => [
+                        'in',
+                        $column_arr
+                    ]
+                ];
+            } else {
+                $where = [
+                    'column_id' => $type
+                ];
+            }
+        } else {
+            $column_arr = Column::getAll(['parent_id' => 54], 'id');
+            $column_arr = array_column($column_arr, 'id');
+            array_push($column_arr, 54);
+            $where = [
+                'column_id' => [
+                    'in',
+                    $column_arr
+                ]
+            ];
+        }
+        $where['is_delete'] = 1;
+        $where['is_audit'] = 1;
+        $where['draft'] = 2;
+        $list = Article::getList($where, 'id,litpic,pubdate,title', 15 , ['id','desc']);
+        //循环列表数据
+        foreach ($list['data'] as $key => $value) {
+            $list['data'][$key]['pubdate'] = date('Y-m-d', $value['pubdate']);
+        }
+        return Response::success($list);
     }
 }
