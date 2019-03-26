@@ -31,6 +31,6 @@ class CommentController extends BaseController
             'status'=>1,
             'aid'=>$id
         ],'*',[$page,$limit]);
-        return Response::success($list);
+        dump($list);
     }
 }
