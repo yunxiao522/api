@@ -11,16 +11,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class ArticleController
 {
     public $request;
-    public function __construct()
+    public function __construct(Request $request)
     {
-
+        $this->request = $request;
     }
 
     public function getTitle(){
-        dump(Route::input('id'));
+        dump($this->request->route('id'));
     }
 }
