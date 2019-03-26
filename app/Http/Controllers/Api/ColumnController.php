@@ -31,7 +31,7 @@ class ColumnController extends BaseController
         $where = [
             'parent_id'=>$id
         ];
-        $list = Column::getAll($where,'id,type_name');
+        $list = Column::getAll($where,['id','type_name']);
         return Response::success($list,'获取数据成功');
     }
 }
