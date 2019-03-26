@@ -111,8 +111,7 @@ class Base extends Model
      */
     public static function getList($where = [],$field = '*',$limit=[0,0],$order =['id','desc']){
         $limit = $limit == [0,0]?[0,self::$limit]:$limit;
-        dump($limit);die;
-        $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->orderBy($order)->get($field);
+        $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->orderBy($order)->get('*');
         dump($res);die;
         $count = self::getCount($where);
         return [
