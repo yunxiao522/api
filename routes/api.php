@@ -19,9 +19,7 @@ Route::prefix('/v1')->group(function(){
     //访问记录
     Route::post('/visit','Api\Visit@visit');
     //获取文档标题
-    Route::get('/getArticleTitle/{id}',function ($id){
-        return Article::getField(['id'=>$id],'title');
-    });
+    Route::get('/getArticleTitle/{id}','Api\ArticleController@getTitle');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
