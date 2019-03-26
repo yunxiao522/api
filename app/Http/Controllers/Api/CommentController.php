@@ -30,7 +30,7 @@ class CommentController extends BaseController
         $list = Comment::getList([
             'status'=>1,
             'article_id'=>$id
-        ],'*',[$page,$limit],['create_time','desc']);
+        ],'*',[$page,$limit],'create_time,desc');
         return Response::success($list);
     }
 }
