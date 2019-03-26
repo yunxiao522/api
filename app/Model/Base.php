@@ -15,8 +15,9 @@ class Base extends Model
 {
     public $table;
     private $cache_ttl = 600;
-    public $primaryKey = 'id';
+    public static $primaryKey = 'id';
     public $timestamps = false;
+    public static $limit = 20;
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -87,5 +88,50 @@ class Base extends Model
         }else{
             return $res[$field];
         }
+    }
+
+    /**
+     * @param $where
+     * @param string $field
+     * @return mixed
+     * Description 统计符合条件的条数
+     */
+    public static function getCount($where,$field = ''){
+        $field = empty($field) ? self::$primaryKey : $field;
+        return self::where($where)->count($field);
+    }
+
+    /**
+     * @param array $where
+     * @param string $field
+     * @param array $limit
+     * @param array $order
+     * @return array
+     * Description 获取符合条件的列表数据
+     */
+    public static function getList($where = [],$field = '*',$limit=[0,0],$order =['id','desc']){
+        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
+        $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->orderBy($order)->get($field);
+        $count = self::getCount($where);
+        return [
+            'count'=>$count,
+            'data'=>$res,
+            'current_page'=>$limit[0]+1,
+            'page'=>ceil($count/$limit[1])
+        ];
+    }
+
+    /**
+     * @param array $where
+     * @param string $field
+     * @param array $limit
+     * @param array $order
+     * @return mixed
+     * Description 获取符合条件的数据
+     */
+    public static function getALL($where = [],$field = '*',$limit = [0,0],$order = ['id','desc']){
+        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
+        $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->orderBy($order)->get($field);
+        return $res;
     }
 }
