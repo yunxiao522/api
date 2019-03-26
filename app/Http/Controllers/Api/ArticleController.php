@@ -11,12 +11,12 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 
-class ArticleController extends BaseController
+class ArticleController
 {
     public $request;
     public function __construct()
     {
-        parent::__construct();
+
     }
 
     public function getTitle($id){
