@@ -19,6 +19,6 @@ class ArticleController extends BaseController
     }
 
     public function getTitle(){
-        $id = $this->request->id;
+        dump($this->request);
     }
 }
