@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 
 class CommentController extends BaseController
 {
+    private $limit = 20;
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -20,8 +21,8 @@ class CommentController extends BaseController
 
     public function getList(){
         $id = $this->request->route('id');
-        $page = $this->request->route('page');
-        $limit = $this->request->route('limit');
+        $page = $this->request->route('page')?$this->request->route('page'):1;
+        $limit = $this->request->route('limit')?$this->request->route('limit'):$this->limit;
         dump($id,$page,$limit);
 
     }
