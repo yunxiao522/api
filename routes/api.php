@@ -23,6 +23,8 @@ Route::prefix('/v1')->group(function(){
     Route::get('/comment/getList/{id}/{page?}/{limit?}','Api\CommentController@getList');
     //获取文档列表
     Route::get('/article/getList/{type?}','Api\ArticleController@getList');
+    //获取下级栏目列表
+    Route::get('/column/getSonList/{id}','Api\ColumnController@getSonList')->where(['id'=>'[0-9]+']);
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
