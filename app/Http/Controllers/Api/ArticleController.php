@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 
 class ArticleController extends BaseController
 {
+    public $request;
     public function __construct(Request $request)
     {
         parent::__construct($request);
