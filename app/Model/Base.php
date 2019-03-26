@@ -118,7 +118,7 @@ class Base extends Model
             'count'=>$count,
             'data'=>$res,
             'current_page'=>$limit[0]-1,
-            'page'=>ceil($count/$limit[1])
+            'page'=>floot(ceil($count/$limit[1]))
         ];
     }
 
