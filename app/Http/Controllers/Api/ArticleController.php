@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Model\Article;
 use Illuminate\Http\Request;
 
 class ArticleController
@@ -19,7 +20,7 @@ class ArticleController
 
     }
 
-    public function getTitle($id){
-        return $id;
+    public function getTitle(){
+        dump(Route::input('id'));
     }
 }
