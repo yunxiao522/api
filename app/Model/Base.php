@@ -15,7 +15,7 @@ class Base extends Model
 {
     public $table;
     private $cache_ttl = 600;
-    private $primaryKey = 'id';
+    public $primaryKey = 'id';
     public $timestamps = false;
     public function __construct(array $attributes = [])
     {
