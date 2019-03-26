@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Model\Article;
 /*
 |--------------------------------------------------------------------------
 | API Routes

@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Model\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
