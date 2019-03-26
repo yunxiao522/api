@@ -22,6 +22,7 @@ class CommentController extends BaseController
         $id = $this->request->route('id');
         $page = $this->request->route('page');
         $limit = $this->request->route('limit');
+        dump($id,$page,$limit);
 
     }
 }
