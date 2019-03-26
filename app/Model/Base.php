@@ -17,7 +17,7 @@ class Base extends Model
     private $cache_ttl = 600;
     public $primaryKey = 'id';
     public $timestamps = false;
-    public static $limit = 20;
+    public $limit = 20;
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
