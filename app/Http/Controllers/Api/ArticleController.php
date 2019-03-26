@@ -22,6 +22,8 @@ class ArticleController
     }
 
     public function getTitle(){
-        dump($this->request->route('id'));
+        $id = $this->request->route('id');
+        $title = Article::getField(['id'=>$id],'title');
+        return Response::success(['title'=>$title]);
     }
 }
