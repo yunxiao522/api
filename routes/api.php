@@ -19,6 +19,8 @@ Route::prefix('/v1')->group(function(){
     Route::post('/visit','Api\Visit@visit');
     //获取文档标题
     Route::get('/article/getTitle/{id}','Api\ArticleController@getTitle');
+    //获取文档评论列表
+    Route::get('/comment/getList/{id}/{page}/{limit}','Api\CommentController@getList');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
