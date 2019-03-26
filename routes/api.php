@@ -20,7 +20,8 @@ Route::prefix('/v1')->group(function(){
     Route::post('/visit','Api\Visit@visit');
     //获取文档标题
     Route::get('/getArticleTitle/{id}',function ($id){
-        \App\Http\Controllers\Api\ArticleController::getTitle($id);
+        $article = new \App\Http\Controllers\Api\ArticleController();
+        return $article->getTitle($id);
     });
 });
 //获取验证令牌

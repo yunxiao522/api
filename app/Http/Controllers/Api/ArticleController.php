@@ -14,12 +14,12 @@ use Illuminate\Http\Request;
 class ArticleController extends BaseController
 {
     public $request;
-    public function __construct(Request $request)
+    public function __construct()
     {
-        parent::__construct($request);
+        parent::__construct();
     }
 
-    public function getTitle(){
-        dump($this->request);
+    public function getTitle($id){
+        return $id;
     }
 }
