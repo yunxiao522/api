@@ -19,10 +19,8 @@ class CommentController extends BaseController
     }
 
     public function getList(){
-        $id = $this->request->route('id');
-        $page = $this->request->route('page');
-        $limit = $this->request->route('limit');
-        dump($id,$page,$limit);
+        $id = $this->request->route();
+        dump($id);
 
     }
 }
