@@ -20,7 +20,7 @@ class Auth extends BaseController
     public static $token_key = 'hash';
     public static $token_quota_key = 'user_quota';
     public static function start(){
-        self::checkAuth();
+
     }
 
     public static function quota(){
