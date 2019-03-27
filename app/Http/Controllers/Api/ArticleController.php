@@ -166,7 +166,7 @@ class ArticleController extends BaseController
         $tag_list_ids = TagList::getALL($where,['tag_id']);
         $tag_list = [];
         foreach ($tag_list_ids as $value){
-            $tag_list[] = Tag::getOne(['id'=>$value->tag_id],['id','tag_name']);
+            $tag_list[] = Tag::getOne(['id'=>$value['tag_id']],['id','tag_name']);
         }
         return $tag_list;
     }
