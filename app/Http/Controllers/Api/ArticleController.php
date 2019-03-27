@@ -95,8 +95,8 @@ class ArticleController extends BaseController
         }
         //获取文档附加表内数据
         $base = new Base();
-        dump(ColumnType::getField(['id'=>$this->article_info['channel']],'table_name'));
         $base->table = ColumnType::getField(['id'=>$this->article_info['channel']],'table_name');
+        dump($base->table);
         $article_extend_info = $base->getOne(['article_id'=>$id],['*']);
         //处理文档附加表的数据
         switch ($this->article_info['channel']){
