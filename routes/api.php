@@ -12,8 +12,9 @@ use Illuminate\Http\Request;
 |
 */
 Route::prefix('/v1')->group(function(){
-    Route::middleware("apiauth::checkAuth")->namespace('base',function (){
-        return 1;
+    Route::middleware("apiauth::checkAuth")->group(function (){
+        //文档、评论的收藏操作
+        Route::put('/article/collection/{id}','Api\LikeController@collection')->where(['id'=>'[0-9]+']);
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
@@ -29,6 +30,7 @@ Route::prefix('/v1')->group(function(){
     Route::get('/article/getInfo/{id}','Api\ArticleController@getInfo')->where(['id'=>'[0-9]+']);
     //意见反馈
     Route::post('/feedback/push','Api\FeedBackController@push');
+
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
