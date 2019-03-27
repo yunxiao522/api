@@ -197,12 +197,17 @@ class Base extends Model
         $limits = ($page - 1) * $limit;
         dump($limits);
         $res = self::where($where)->whereIn($whereIn[0], $whereIn[1])->skip($limits)->take($limit)->orderBy($order[0], $order[1])->get($field)->toArray();
-        $count = self::where($where)->whereIn($whereIn[0], $whereIn[1])->count('id');
+        $count = self::getCountIn($where,$whereIn);
         return [
             'count' => $count,
             'data' => $res,
             'current_page' => $page,
             'page' => ceil($count / $limit)
         ];
+    }
+
+    public static function getCountIn($where = [],$whereIn = [] ,$field = []){
+        $field = empty($field)?self::$pk:$field
+        return self::where($where)->whereIn($whereIn[0], $whereIn[1])->count($field);
     }
 }
