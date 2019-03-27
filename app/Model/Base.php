@@ -146,15 +146,9 @@ class Base extends Model
      * @return mixed
      * Description 获取符合条件的数据
      */
-    public static function getALL($where = [], $field = '*', $limit = 0, $order = ['id', 'desc'])
+    public static function getALL($where = [], $field = '*', $limit = 100, $order = ['id', 'desc'])
     {
-        $page = request('page');
-        if (empty($page) || !is_numeric($page)) {
-            $page = 1;
-        }
-        $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
-        $limits = ($page - 1) * $limit;
-        $res = self::where($where)->skip($limits)->take($limit)->get($field)->toArray();
+        $res = self::where($where)->skip(0)->take($limit)->get($field)->toArray();
         return $res;
     }
 
@@ -167,15 +161,9 @@ class Base extends Model
      * @return mixed
      * Description 获取符合条件的全部数据,查询条件中有使用in,可使用此方法
      */
-    public static function getAllIn($where = [], $wherein = [], $field = '*', $limit = 0, $order = ['id', 'desc'])
+    public static function getAllIn($where = [], $wherein = [], $field = '*', $limit = 100, $order = ['id', 'desc'])
     {
-        $page = request('page');
-        if (empty($page) || !is_numeric($page)) {
-            $page = 1;
-        }
-        $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
-        $limits = ($page - 1) * $limit;
-        $res = self::where($where)->whereIn($wherein[0], $wherein[1])->skip($limits)->take($limit)->get($field)->toArray();
+        $res = self::where($where)->whereIn($wherein[0], $wherein[1])->skip(0)->take($limit)->get($field)->toArray();
         return $res;
     }
 
