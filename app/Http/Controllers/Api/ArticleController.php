@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\Admin;
 use App\Model\Article;
+use App\Model\ArticleImages;
 use App\Model\Base;
 use App\Model\Column;
 use App\Model\ColumnType;
@@ -94,12 +95,10 @@ class ArticleController extends BaseController
             return Response::fail($data);
         }
         //获取文档附加表内数据
-        $base = new Base();
-        $base->table = ColumnType::getField(['id'=>$this->article_info['channel']],'table_name');
-        $article_extend_info = $base::getOne(['article_id'=>$id],['*']);
         //处理文档附加表的数据
         switch ($this->article_info['channel']){
             case 2:
+                $article_extend_info = ArticleImages::getOne(['article_id'=>$id],'*');
                 $data['prev_p'] = $p == 0?0:$p-1;
                 $data['next_p'] = $p > $article_extend_info['imgnum'] ? $article_extend_info['imgnum']:$p+1;
                 //验证分页数据,防止出错
