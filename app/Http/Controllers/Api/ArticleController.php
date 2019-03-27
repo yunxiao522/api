@@ -244,7 +244,7 @@ class ArticleController extends BaseController
     public function getPrevArticleInfo(){
         $where = [
             ['id','<',$this->article_info['id']],
-            'column_id'=>$this->article_info['id']
+            'column_id'=>$this->article_info['column_id']
         ];
         $article_info = Article::getOne($where,['id','litpic','title'],['id','asc']);
         return empty($article_info)?['id'=>0]:$article_info;
@@ -258,10 +258,9 @@ class ArticleController extends BaseController
         DB::connection()->enableQueryLog();
         $where = [
             ['id','>',$this->article_info['id']],
-            'column_id'=>$this->article_info['id']
+            'column_id'=>$this->article_info['column_id']
         ];
         $article_info = Article::getOne($where,['id','litpic','title'],['id','desc']);
-        print_r(DB::getQueryLog());
         return empty($article_info)?['id'=>0]:$article_info;
     }
 
