@@ -47,7 +47,7 @@ class LikeController extends BaseController
         ],'id');
         if(!empty($like_id)){
             //删除收藏操作
-            $res = MyLike::del(['ud'=>$like_id]);
+            $res = MyLike::del(['id'=>$like_id]);
             if($res){
                 return Response::success('取消收藏成功','',2);
             }else{
