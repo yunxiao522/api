@@ -41,6 +41,7 @@ class Auth extends BaseController
         }
         $user_token = User::getOne(['username'=>$user,'password'=>$pass],['token']);
         if(empty($user_token)){
+            dump($user_token);
             Response::setHeaderCode(401,'auth faild');
             Response::fail('auth faild');
         }else{
