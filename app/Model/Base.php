@@ -133,6 +133,10 @@ class Base extends Model
     public static function getALL($where = [],$field = '*',$limit = [0,0],$order = ['id','desc']){
         $limit = $limit == [0,0]?[0,self::$limit]:$limit;
         $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->get($field);
-        return $res;
+        return self::objToArr($res);
+    }
+
+    public static function objToArr($obj){
+        return json_decode(json_encode($obj,JSON_UNESCAPED_UNICODE),true);
     }
 }
