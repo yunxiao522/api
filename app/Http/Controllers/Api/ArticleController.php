@@ -63,7 +63,6 @@ class ArticleController extends BaseController
         $where['is_delete'] = 1;
         $where['is_audit'] = 1;
         $where['draft'] = 2;
-        dump($where);die;
         $list = Article::getList($where, ['id','litpic','pubdate','title'], [0,15] , ['id','desc']);
         //循环列表数据
         foreach ($list['data'] as $key => $value) {
