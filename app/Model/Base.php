@@ -144,8 +144,8 @@ class Base extends Model
 
     public static function getListIn($where = [],$whereIn=[],$field = "*" ,$limit = [0,0],$order = ['id','desc']){
         $limit = $limit == [0,0]?[0,self::$limit]:$limit;
-        $res = self::where($where)->whereIn($whereIn)->skip($limit[0]*$limit[1])->orderBy($order[0],$order[1])->get($field);
-        $count = self::where($where)->whereIn($whereIn)->Count();
+        $res = self::where($where)->whereIn($whereIn[0],$whereIn[1])->skip($limit[0]*$limit[1])->orderBy($order[0],$order[1])->get($field);
+        $count = self::where($where)->whereIn($whereIn[0],$whereIn[1])->Count();
         return [
             'count'=>$count,
             'data'=>$res,
