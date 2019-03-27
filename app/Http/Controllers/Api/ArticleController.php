@@ -143,9 +143,9 @@ class ArticleController extends BaseController
         $data['comment_num'] = $this->article_info['comment_num'];
         //获取作者信息
         if ($this->article_info['user_type'] == 1) {
-            $data['user_info'] = User::getOne(['id' => $this->article_info['userid']], 'nickname,face');
+            $data['user_info'] = User::getOne(['id' => $this->article_info['userid']], ['nickname','face']);
         } else if ($this->article_info['user_type'] == 2) {
-            $data['user_info'] = Admin::getOne(['id' => $this->article_info['userid']], 'nick_name as nickname,face,real_name');
+            $data['user_info'] = Admin::getOne(['id' => $this->article_info['userid']], ['nick_name as nickname','face','real_name']);
         }
         $data['source'] = $this->article_info['source'];
         $data['author'] = $this->article_info['author'];
