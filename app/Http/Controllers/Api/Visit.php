@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Model\Article;
+use App\Model\ArticleHot;
 use App\Model\Click;
 use App\Model\LogVisit;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class Visit extends BaseController
         $this->addClick();
         $this->addArticleClick();
         $this->addLogVisit($this->request->session_id,$this->request->user_id,$this->request->url);
+        $this->addArticleHotClick();
     }
     /**
      * Description 修改网站点击数
@@ -101,6 +103,47 @@ class Visit extends BaseController
         elseif (strpos($useragent,'bot') !== false){$bot = '其它蜘蛛';}
         if(isset($bot)){
             die;
+        }
+    }
+
+    /**
+     *Description 修改文档分布点击量数据
+     */
+    private function addArticleHotClick(){
+        $pubdate = $this->article_info['pubdate'];
+        $time = date('Y',$pubdate);
+        $where = [
+            'type'=>1,
+            'time'=>$time
+        ];
+        $p_id = ArticleHot::getOne($where,'id');
+        if(empty($hot_id)){
+            $p_id = ArticleHot::add([
+                'type'=>1,
+                'time'=>$time,
+                'click'=>1,
+                'create_time'=>time(),
+                'parent_id'=>0
+            ]);
+        }else{
+            ArticleHot::incr($where,'click',1);
+        }
+        $where = [
+            'type'=>2,
+            'time'=>date('M',$pubdate),
+            'parent_id'=>$p_id
+        ];
+        $hot_id = ArticleHot::getOne($where,'id');
+        if(empty($hot_id)){
+            ArticleHot::add([
+                'type'=>2,
+                'time'=>$time,
+                'click'=>1,
+                'create_time'=>time(),
+                'parent_id'=>$p_id
+            ]);
+        }else{
+            ArticleHot::incr($where,'click',1);
         }
     }
 }

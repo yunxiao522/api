@@ -25,12 +25,11 @@ class CommentController extends BaseController
      */
     public function getList(){
         $id = $this->request->route('id');
-        $page = $this->request->route('page') ? $this->request->route('page'):1;
         $limit = $this->request->route('limit') && $this->request->route('limit') <= $this->limit?$this->request->route('limit'):$this->limit;
         $list = Comment::getList([
             'status'=>1,
             'aid'=>$id
-        ],'*',[$page,$limit]);
+        ],'*',$limit,['create_time','desc']);
         dump($list);
     }
 }

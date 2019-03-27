@@ -9,10 +9,17 @@
 namespace App\Model;
 
 
-class Cache extends Base
+use App\Http\Controllers\Api\Redis;
+
+class Cache
 {
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
+    public $table;
+    private static $redis;
+    public static function execute($table,$data,$type,$ttl){
+        if($type == 'get'){
+
+        }
     }
+
+
 }

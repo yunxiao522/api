@@ -31,11 +31,23 @@ class Redis
         }
     }
 
+    /**
+     * @param $key
+     * @return mixed
+     * Description 获取key的值
+     */
     public static function get($key){
         self::getRedis();
         return self::$redis->get($key);
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @param $ttl
+     * @return mixed
+     * Description 设置key的值
+     */
     public static function set($key ,$value ,$ttl){
         self::getRedis();
         return self::$redis->set($key,$value,$ttl);
@@ -48,6 +60,55 @@ class Redis
             self::$redis->incr($key,$num);
         }else{
             self::$redis->incr($key,$num);
+        }
+    }
+
+    /**
+     * @param $table
+     * @param $field
+     * @return mixed
+     * Description 获取hash的莫个field值
+     */
+    public static function hget($table,$field){
+        self::getRedis();
+        return self::$redis->hGet($table,$field);
+    }
+
+    /**
+     * @param $table
+     * @param $field
+     * @param $value
+     * @return mixed
+     * Description 设置hash莫个field的value
+     */
+    public static function hset($table,$field,$value){
+        self::getRedis();
+        return self::$redis->hSet($table,$field,$value);
+    }
+
+    /**
+     * @param $table
+     * @param $field
+     * @return mixed
+     * Description 删除hash某个field的值
+     */
+    public static function hdel($table,$field){
+        self::getRedis();
+        return self::$redis->hdel($table,$field);
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     * Description 判断莫个hash表是否存在
+     */
+    public static function hexist($key){
+        self::getRedis();
+        $result = self::$redis->hexists($key);
+        if($result == 1){
+            return true;
+        }else{
+            return false;
         }
     }
 }

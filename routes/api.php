@@ -25,6 +25,8 @@ Route::prefix('/v1')->group(function(){
     Route::get('/article/getList/{type?}','Api\ArticleController@getList');
     //获取下级栏目列表
     Route::get('/column/getSonList/{id}','Api\ColumnController@getSonList')->where(['id'=>'[0-9]+']);
+    //获取文档信息
+    Route::get('/article/getInfo/{id}','Api\ArticleController@getInfo')->where(['id'=>'[0-9]+']);
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');

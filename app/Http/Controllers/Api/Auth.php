@@ -57,16 +57,15 @@ class Auth extends BaseController
     }
 
     /**
-     * @param $token
      * @return mixed
      * Description 获取用户token
      */
-    public static function getUserToken($token){
-        $user_token = Redis::get($token);
-        if(empty($user_token)){
-            Response::setHeaderCode(401,'token is old');
-            Response::fail('token is old');
+    public static function getUserToken(){
+        $token = self::getAuthStatus();
+        if(empty($token)){
+            return false;
         }
+        $user_token = Redis::get($token);
         return $user_token;
     }
 
@@ -74,11 +73,35 @@ class Auth extends BaseController
      *Description 验证认证信息
      */
     public static function checkAuth(){
-        $request = new Request();
-        $token = $request->input('token');
-        if(empty($token) || empty(Redis::get($token))){
+        if(self::getAuthStatus()){
             Response::setHeaderCode(401,'auth faild');
             Response::fail('auth faild');
         }
+    }
+
+    /**
+     * @return array|Request|string
+     * Descriptionn 获取验证结果
+     */
+    public static function getAuthStatus(){
+        $token = request('token');
+        if(empty($token) || empty(Redis::get($token))){
+            return false;
+        }
+        return $token;
+    }
+
+    /**
+     *Description 获取用户id
+     */
+    public static function getUserId(){
+        $token = self::getUserToken();
+        if(empty($token)){
+            return false;
+        }
+        $where = [
+            'token'=>$token,
+        ];
+        return User::getField($where,'id');
     }
 }

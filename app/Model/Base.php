@@ -33,9 +33,9 @@ class Base extends Model
      * @return mixed
      * Description 查找单条数据
      */
-    public static function getOne($where, $field = '*')
+    public static function getOne($where, $field = '*' ,$order = ['id','desc'])
     {
-        return self::where($where)->first($field);
+        return self::where($where)->orderBy($order[0],$order[1])->first($field);
     }
 
 
