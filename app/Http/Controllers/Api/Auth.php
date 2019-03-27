@@ -86,6 +86,7 @@ class Auth extends BaseController
      */
     public static function getAuthStatus(){
         $token = request('token');
+        dump($token);
         if(empty($token) || empty(Redis::get($token))){
             return false;
         }
