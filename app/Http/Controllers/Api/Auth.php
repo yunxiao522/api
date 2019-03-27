@@ -77,7 +77,7 @@ class Auth extends BaseController
             Response::setHeaderCode(401,'auth faild');
             Response::fail('auth faild');
         }
-        return response()->json([]);
+        return response()->json();
     }
 
     /**
