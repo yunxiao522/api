@@ -17,4 +17,8 @@ class FeedBackController extends BaseController
     {
         parent::__construct($request);
     }
+
+    public function push(){
+
+    }
 }
