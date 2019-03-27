@@ -11,15 +11,12 @@ namespace App\Http\Controllers\Api;
 use App\Model\Admin;
 use App\Model\Article;
 use App\Model\ArticleImages;
-use App\Model\Base;
 use App\Model\Column;
-use App\Model\ColumnType;
 use App\Model\MyLike;
 use App\Model\Tag;
 use App\Model\TagList;
 use App\Model\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ArticleController extends BaseController
 {
@@ -86,6 +83,7 @@ class ArticleController extends BaseController
 
     public function getInfo(){
         $id = $this->request->route('id');
+        dump($id);
         $p = request('p');
         if(empty($p) || !is_numeric($p) || $p <0){
             $p = 0;
