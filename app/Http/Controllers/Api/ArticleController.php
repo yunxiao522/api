@@ -45,9 +45,16 @@ class ArticleController extends BaseController
         //组合查询条件
         if ($type != "undefined") {
             if ($type == 24) {
-                $column_arr = Column::getAll(['parent_id' => $type], 'id');
+                $column_arr = Column::getAll(['parent_id' => $type], 'id',100);
                 $column_arr = array_column($column_arr, 'id');
                 array_push($column_arr, 24);
+                $whereIn = [
+                    'column_id', $column_arr
+                ];
+            } elseif($type == 54){
+                $column_arr = Column::getAll(['parent_id' => 54], 'id',100);
+                $column_arr = array_column($column_arr, 'id');
+                array_push($column_arr, 54);
                 $whereIn = [
                     'column_id', $column_arr
                 ];
@@ -56,18 +63,11 @@ class ArticleController extends BaseController
                     'column_id' => $type
                 ];
             }
-        } else {
-            $column_arr = Column::getAll(['parent_id' => 54], 'id');
-            $column_arr = array_column($column_arr, 'id');
-            array_push($column_arr, 54);
-            $whereIn = [
-                'column_id', $column_arr
-            ];
         }
         $where['is_delete'] = 1;
         $where['is_audit'] = 1;
         $where['draft'] = 2;
-        $list = Article::getListIn($where,$whereIn, ['id','litpic','pubdate','title'], [0,15] , ['id','desc']);
+        $list = Article::getListIn($where,$whereIn, ['id','litpic','pubdate','title'], 15 , ['id','desc']);
         //循环列表数据
         foreach ($list['data'] as $key => $value) {
             $list['data'][$key]['pubdate'] = date('Y-m-d', $value['pubdate']);
