@@ -11,7 +11,7 @@ namespace App\Model;
 
 class Admin extends Base
 {
-    public $table = 'admin';
+    public $table = 'admin_user';
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
