@@ -89,7 +89,6 @@ class Auth extends BaseController
         if(empty($token) || empty(Redis::get($token))){
             return false;
         }
-        dump($token);
         return $token;
     }
 

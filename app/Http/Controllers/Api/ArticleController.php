@@ -217,7 +217,6 @@ class ArticleController extends BaseController
      */
     public function getArticleLikeStatus($article_id,$p = 0){
         $user_id = Auth::getUserId();
-        dump($user_id);
         if(!$user_id){
             return false;
         }
@@ -227,7 +226,6 @@ class ArticleController extends BaseController
             'alone'=>$p,
             'type'=>1
         ];
-        dump($where);
         $res = MyLike::getField($where,'id');
         if($res){
             return true;
