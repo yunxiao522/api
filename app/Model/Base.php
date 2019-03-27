@@ -136,7 +136,21 @@ class Base extends Model
         return self::objToArr($res);
     }
 
-    public static function objToArr($obj){
-        return json_decode(json_encode($obj,JSON_UNESCAPED_UNICODE),true);
+    public static function getAllIn($where = [],$wherein = [],$field = '*',$limit = [0,0],$order = ['id','desc']){
+        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
+        $res = self::where($where)->whereIn($wherein)->skip($limit[0]*$limit[1])->take($limit[1])->get($field)->toArray();
+        return $res;
+    }
+
+    public static function getListIn($where = [],$whereIn=[],$field = "*" ,$limit = [0,0],$order = ['id','desc']){
+        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
+        $res = self::where($where)->whereIn($whereIn)->skip($limit[0]*$limit[1])->orderBy($order[0],$order[1])->get($field);
+        $count = self::where($where)->whereIn($whereIn)->Count();
+        return [
+            'count'=>$count,
+            'data'=>$res,
+            'current_page'=>$limit[0] - 1,
+            'page'=>ceil($count/$limit[1])
+        ];
     }
 }
