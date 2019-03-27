@@ -27,6 +27,7 @@ class LikeController extends BaseController
      */
     public function collection()
     {
+        dump(Auth::getUserId());die;
         $id = $this->request->route('id');
         $p = request('p');
         if (!empty($p) && !is_numeric($p)) {
