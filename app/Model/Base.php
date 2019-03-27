@@ -35,7 +35,7 @@ class Base extends Model
      */
     public static function getOne($where, $field = '*' ,$order = ['id','desc'])
     {
-        return self::where($where)->find($field);
+        return self::where($where)->orderBy($order[0],$order[1])->find($field);
     }
 
 

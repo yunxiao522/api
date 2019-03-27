@@ -131,6 +131,7 @@ class ArticleController extends BaseController
             'is_audit' => 1,
             'draft' => 2
         ];
+        dump($where);
         $this->article_info = Article::getOne($where, '*');
         dump($this->article_info);
         if (empty($this->article_info)) {
