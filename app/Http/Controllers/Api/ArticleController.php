@@ -132,10 +132,7 @@ class ArticleController extends BaseController
             'is_audit' => 1,
             'draft' => 2
         ];
-        DB::connection()->enableQueryLog();
         $this->article_info = Article::getOne($where, '*');
-        print_r(DB::getQueryLog());
-        dump($this->article_info);
         if (empty($this->article_info)) {
             return '文档不存在';
         }
