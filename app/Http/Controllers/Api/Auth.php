@@ -73,8 +73,8 @@ class Auth extends BaseController
      *Description 验证认证信息
      */
     public static function checkAuth(){
-        dump(self::getAuthStatus());
         if(!self::getAuthStatus()){
+            dump(self::getAuthStatus());
             Response::setHeaderCode(401,'auth faild');
             Response::fail('auth faild');
         }
