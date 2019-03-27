@@ -62,7 +62,7 @@ class Auth extends BaseController
      */
     public static function getUserToken(){
         $token = self::getAuthStatus();
-        if(empty($token)){
+        if(!$token){
             return false;
         }
         $user_token = Redis::get($token);
@@ -73,7 +73,7 @@ class Auth extends BaseController
      *Description 验证认证信息
      */
     public static function checkAuth(){
-        if(self::getAuthStatus()){
+        if(!self::getAuthStatus()){
             Response::setHeaderCode(401,'auth faild');
             Response::fail('auth faild');
         }
