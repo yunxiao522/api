@@ -48,9 +48,7 @@ class ArticleController extends BaseController
                 $column_arr = Column::getAll(['parent_id' => $type], 'id');
                 $column_arr = array_column($column_arr, 'id');
                 array_push($column_arr, 24);
-                $whereIn = [
-                    'column_id', $column_arr
-                ];
+                $whereIn = "'column_id', $column_arr";
             } else {
                 $where = [
                     'column_id' => $type
@@ -60,9 +58,7 @@ class ArticleController extends BaseController
             $column_arr = Column::getAll(['parent_id' => 54], 'id');
             $column_arr = array_column($column_arr, 'id');
             array_push($column_arr, 54);
-            $whereIn = [
-                'column_id', $column_arr
-            ];
+            $whereIn = "'column_id', $column_arr";
         }
         $where['is_delete'] = 1;
         $where['is_audit'] = 1;
