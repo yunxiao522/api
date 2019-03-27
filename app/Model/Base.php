@@ -11,6 +11,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Base extends Model
 {
@@ -189,15 +190,16 @@ class Base extends Model
      */
     public static function getListIn($where = [], $whereIn = [], $field = "*", $limit = 0, $order = ['id', 'desc'])
     {
+        DB::connection()->enableQueryLog();
         $page = request('page');
         if (empty($page) || !is_numeric($page) || $page <= 0) {
             $page = 1;
         }
         $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
         $limits = ($page - 1) * $limit;
-        dump($limits);
         $res = self::where($where)->whereIn($whereIn[0], $whereIn[1])->skip($limits)->take($limit)->orderBy($order[0], $order[1])->get($field)->toArray();
         $count = self::getCountIn($where,$whereIn);
+        dump(DB::getQueryLog());die;
         return [
             'count' => $count,
             'data' => $res,
