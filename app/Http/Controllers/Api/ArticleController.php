@@ -45,6 +45,7 @@ class ArticleController extends BaseController
         if ($type != "undefined") {
             if ($type == 24) {
                 $column_arr = Column::getAll(['parent_id' => $type], 'id');
+                dump($column_arr);
                 $column_arr = array_column($column_arr, 'id');
                 array_push($column_arr, 24);
                 $where = [
