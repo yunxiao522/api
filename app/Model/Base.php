@@ -207,7 +207,7 @@ class Base extends Model
     }
 
     public static function getCountIn($where = [],$whereIn = [] ,$field = []){
-        $field = empty($field)?self::$pk:$field
+        $field = empty($field)?self::$pk:$field;
         return self::where($where)->whereIn($whereIn[0], $whereIn[1])->count($field);
     }
 }
