@@ -178,7 +178,6 @@ class Base extends Model
      */
     public static function getListIn($where = [], $whereIn = [], $field = "*", $limit = 0, $order = ['id', 'desc'])
     {
-        DB::connection()->enableQueryLog();
         $page = request('page');
         if (empty($page) || !is_numeric($page) || $page <= 0) {
             $page = 1;
@@ -186,18 +185,12 @@ class Base extends Model
         $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
         $limits = ($page - 1) * $limit;
         $res = self::where($where)->whereIn($whereIn[0], $whereIn[1])->skip($limits)->take($limit)->orderBy($order[0], $order[1])->get($field)->toArray();
-        $count = self::getCountIn($where,$whereIn);
-        dump(DB::getQueryLog());die;
+        $count = self::where($where)->whereIn($whereIn[0], $whereIn[1])->count();
         return [
             'count' => $count,
             'data' => $res,
             'current_page' => $page,
             'page' => ceil($count / $limit)
         ];
-    }
-
-    public static function getCountIn($where = [],$whereIn = [] ,$field = []){
-        $field = empty($field)?self::$pk:$field;
-        return self::where($where)->whereIn($whereIn[0], $whereIn[1])->count($field);
     }
 }
