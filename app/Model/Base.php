@@ -190,7 +190,7 @@ class Base extends Model
     public static function getListIn($where = [], $whereIn = [], $field = "*", $limit = 0, $order = ['id', 'desc'])
     {
         $page = request('page');
-        if (empty($page) || !is_numeric($page)) {
+        if (empty($page) || !is_numeric($page) || $page <= 0) {
             $page = 1;
         }
         $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
