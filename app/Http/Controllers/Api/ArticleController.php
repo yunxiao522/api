@@ -254,11 +254,13 @@ class ArticleController extends BaseController
      * Description 获取下一篇文档数据
      */
     public function getNextArticleInfo(){
+        DB::connection()->enableQueryLog();
         $where = [
             ['id','>',$this->article_info['id']],
             'column_id'=>$this->article_info['id']
         ];
         $article_info = Article::getOne($where,['id','litpic','title'],['id','desc']);
+        print_r(DB::getQueryLog());
         return empty($article_info)?['id'=>0]:$article_info;
     }
 
