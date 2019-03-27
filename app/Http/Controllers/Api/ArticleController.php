@@ -47,25 +47,17 @@ class ArticleController extends BaseController
                 $column_arr = array_column($column_arr, 'id');
                 array_push($column_arr, 24);
                 $where = [
-                    'column_id' => [
-                        'in',
-                        $column_arr
-                    ]
+                    'in' => ['column_id', $column_arr]
                 ];
             } else {
-                $where = [
-                    'column_id' => $type
-                ];
+                $where = ['column_id' => $type];
             }
         } else {
             $column_arr = Column::getAll(['parent_id' => 54], 'id');
             $column_arr = array_column($column_arr, 'id');
             array_push($column_arr, 54);
             $where = [
-                'column_id' => [
-                    'in',
-                    $column_arr
-                ]
+                'in' => ['column_id', $column_arr]
             ];
         }
         $where['is_delete'] = 1;
