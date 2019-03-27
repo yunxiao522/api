@@ -132,6 +132,7 @@ class ArticleController extends BaseController
             'draft' => 2
         ];
         $this->article_info = Article::getOne($where, '*');
+        dump($this->article_info);
         if (empty($this->article_info)) {
             return '文档不存在';
         }
