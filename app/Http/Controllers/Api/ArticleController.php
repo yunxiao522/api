@@ -102,7 +102,7 @@ class ArticleController extends BaseController
                 $data['next_p'] = $p > $article_extend_info['imgnum'] ? $article_extend_info['imgnum']:$p+1;
                 //验证分页数据,防止出错
                 if($article_extend_info['imgnum'] < ($p+1)){
-                    return Response::fail('没有 更多了','',1001);
+                    return Response::fail('没有更多了','',1001);
                 }
                 $imgurls = explode(',',$article_extend_info['imgurls']);
                 $src_rule = "/(href|src)=([\"|']?)([^\"'>]+.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG))/i";
@@ -227,6 +227,7 @@ class ArticleController extends BaseController
             'alone'=>$p,
             'type'=>1
         ];
+        dump($where);
         $res = MyLike::getField($where,'id');
         if($res){
             return true;
