@@ -20,6 +20,7 @@ class Base extends Model
     private static $pk = 'id';
     public $timestamps = false;
     public static $limit = 20;
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -31,7 +32,8 @@ class Base extends Model
      * @return mixed
      * Description 查找单条数据
      */
-    public static function getOne($where ,$field = '*'){
+    public static function getOne($where, $field = '*')
+    {
         return self::where($where)->first($field);
     }
 
@@ -42,7 +44,8 @@ class Base extends Model
      * @return mixed
      * Description 修改数据
      */
-    public static function edit($where ,$data){
+    public static function edit($where, $data)
+    {
         return self::where($where)->update($data);
     }
 
@@ -53,8 +56,9 @@ class Base extends Model
      * @return mixed
      * Description 增加字段值
      */
-    public static function incr($where,$field,$num = 1){
-        return self::where($where)->increment($field,$num);
+    public static function incr($where, $field, $num = 1)
+    {
+        return self::where($where)->increment($field, $num);
     }
 
     /**
@@ -64,8 +68,9 @@ class Base extends Model
      * @return mixed
      * Description 减少字段值
      */
-    public static function decr($where,$field,$num = 1){
-        return self::where($where)->decrement($field,$num);
+    public static function decr($where, $field, $num = 1)
+    {
+        return self::where($where)->decrement($field, $num);
     }
 
     /**
@@ -73,7 +78,8 @@ class Base extends Model
      * @return mixed
      * Description 插入数据
      */
-    public static function add($data){
+    public static function add($data)
+    {
         return self::insert($data);
     }
 
@@ -83,11 +89,12 @@ class Base extends Model
      * @return string
      * Description 获取条件获取某一列数据
      */
-    public static function getField($where,$field){
+    public static function getField($where, $field)
+    {
         $res = self::where($where)->first($field);
-        if(!isset($res[$field])){
+        if (!isset($res[$field])) {
             return '';
-        }else{
+        } else {
             return $res[$field];
         }
     }
@@ -98,7 +105,8 @@ class Base extends Model
      * @return mixed
      * Description 统计符合条件的条数
      */
-    public static function getCount($where,$field = ''){
+    public static function getCount($where, $field = '')
+    {
         $field = empty($field) ? self::$pk : $field;
         return self::where($where)->count($field);
     }
@@ -111,17 +119,21 @@ class Base extends Model
      * @return array
      * Description 获取符合条件的列表数据
      */
-    public static function getList($where = [],$field = '*',$limit=[0,0],$order =['id','desc']){
+    public static function getList($where = [], $field = '*', $limit = 0, $order = ['id', 'desc'])
+    {
         $page = request('page');
-        dump($page);
-        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
-        $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->orderBy($order[0],$order[1])->get($field);
+        if (empty($page) || !is_numeric($page)) {
+            $page = 1;
+        }
+        $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
+        $limits = ($page - 1) * $limit;
+        $res = self::where($where)->skip($limits)->take($limit)->orderBy($order[0], $order[1])->get($field);
         $count = self::getCount($where);
         return [
-            'count'=>$count,
-            'data'=>$res,
-            'current_page'=>$limit[0]-1,
-            'page'=>ceil($count/$limit[1])
+            'count' => $count,
+            'data' => $res,
+            'current_page' => $limit[0] - 1,
+            'page' => ceil($count / $limit[1])
         ];
     }
 
@@ -133,29 +145,63 @@ class Base extends Model
      * @return mixed
      * Description 获取符合条件的数据
      */
-    public static function getALL($where = [],$field = '*',$limit = [0,0],$order = ['id','desc']){
-        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
-        $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->get($field)->toArray();
-        return $res;
-    }
-
-    public static function getAllIn($where = [],$wherein = [],$field = '*',$limit = [0,0],$order = ['id','desc']){
-        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
-        $res = self::where($where)->whereIn($wherein[0],$wherein[1])->skip($limit[0]*$limit[1])->take($limit[1])->get($field)->toArray();
-        return $res;
-    }
-
-    public static function getListIn($where = [],$whereIn=[],$field = "*" ,$limit = [0,0],$order = ['id','desc']){
+    public static function getALL($where = [], $field = '*', $limit = 0, $order = ['id', 'desc'])
+    {
         $page = request('page');
-        dump($page);
-        $limit = $limit == [0,0]?[0,self::$limit]:$limit;
-        $res = self::where($where)->whereIn($whereIn[0],$whereIn[1])->skip($limit[0]*$limit[1])->take($limit[1])->orderBy($order[0],$order[1])->get($field);
-        $count = self::where($where)->whereIn($whereIn[0],$whereIn[1])->count();
+        if (empty($page) || !is_numeric($page)) {
+            $page = 1;
+        }
+        $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
+        $limits = ($page - 1) * $limit;
+        $res = self::where($where)->skip($limit)->take($limits)->get($field)->toArray();
+        return $res;
+    }
+
+    /**
+     * @param array $where
+     * @param array $wherein
+     * @param string $field
+     * @param int $limit
+     * @param array $order
+     * @return mixed
+     * Description 获取符合条件的全部数据,查询条件中有使用in,可使用此方法
+     */
+    public static function getAllIn($where = [], $wherein = [], $field = '*', $limit = 0, $order = ['id', 'desc'])
+    {
+        $page = request('page');
+        if (empty($page) || !is_numeric($page)) {
+            $page = 1;
+        }
+        $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
+        $limits = ($page - 1) * $limit;
+        $res = self::where($where)->whereIn($wherein[0], $wherein[1])->skip($limits)->take($limit)->get($field)->toArray();
+        return $res;
+    }
+
+    /**
+     * @param array $where
+     * @param array $whereIn
+     * @param string $field
+     * @param int $limit
+     * @param array $order
+     * @return array
+     * Description 获取符合条件的全部数据,查询条件中有使用in,可使用此方法
+     */
+    public static function getListIn($where = [], $whereIn = [], $field = "*", $limit = 0, $order = ['id', 'desc'])
+    {
+        $page = request('page');
+        if (empty($page) || !is_numeric($page)) {
+            $page = 1;
+        }
+        $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
+        $limits = ($page - 1) * $limit;
+        $res = self::where($where)->whereIn($whereIn[0], $whereIn[1])->skip($limits)->take($limit)->orderBy($order[0], $order[1])->get($field);
+        $count = self::where($where)->whereIn($whereIn[0], $whereIn[1])->count();
         return [
-            'count'=>$count,
-            'data'=>$res,
-            'current_page'=>$limit[0] - 1,
-            'page'=>ceil($count/$limit[1])
+            'count' => $count,
+            'data' => $res,
+            'current_page' => $limit[0] - 1,
+            'page' => ceil($count / $limit[1])
         ];
     }
 }
