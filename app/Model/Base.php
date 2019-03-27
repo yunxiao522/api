@@ -153,7 +153,7 @@ class Base extends Model
         }
         $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
         $limits = ($page - 1) * $limit;
-        $res = self::where($where)->skip($limit)->take($limits)->get($field)->toArray();
+        $res = self::where($where)->skip($limits)->take($limit)->get($field)->toArray();
         return $res;
     }
 
