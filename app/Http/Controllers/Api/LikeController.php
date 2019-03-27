@@ -56,7 +56,7 @@ class LikeController extends BaseController
         }
         $article_info = Article::getOne([
             'id'=>$id,
-            'is_deltete'=>1,
+            'is_delete'=>1,
             'is_audit'=>1,
             'draft'=>2
         ],['channel','column_id']);
