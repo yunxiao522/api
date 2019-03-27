@@ -74,9 +74,10 @@ class Auth extends BaseController
      */
     public static function checkAuth(){
         if(!self::getAuthStatus()){
-//            Response::setHeaderCode(401,'auth faild');
-//            Response::fail('auth faild');
+            Response::setHeaderCode(401,'auth faild');
+            Response::fail('auth faild');
         }
+        return response()->json([]);
     }
 
     /**
