@@ -10,6 +10,7 @@ namespace App\Model;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Base extends Model
 {
@@ -111,6 +112,8 @@ class Base extends Model
      * Description 获取符合条件的列表数据
      */
     public static function getList($where = [],$field = '*',$limit=[0,0],$order =['id','desc']){
+        $page = request('page');
+        dump($page);
         $limit = $limit == [0,0]?[0,self::$limit]:$limit;
         $res = self::where($where)->skip($limit[0]*$limit[1])->take($limit[1])->orderBy($order[0],$order[1])->get($field);
         $count = self::getCount($where);
