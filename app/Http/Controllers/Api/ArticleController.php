@@ -84,7 +84,6 @@ class ArticleController extends BaseController
 
     public function getInfo(){
         $id = $this->request->route('id');
-        dump($id);
         $p = request('p');
         if(empty($p) || !is_numeric($p) || $p <0){
             $p = 0;
