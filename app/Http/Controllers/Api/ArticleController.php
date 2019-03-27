@@ -93,7 +93,6 @@ class ArticleController extends BaseController
         if(is_string($data)){
             return Response::fail($data);
         }
-        //获取文档附加表内数据
         //处理文档附加表的数据
         switch ($this->article_info['channel']){
             case 2:
@@ -218,6 +217,7 @@ class ArticleController extends BaseController
      */
     public function getArticleLikeStatus($article_id,$p = 0){
         $user_id = Auth::getUserId();
+        dump($user_id);
         if(!$user_id){
             return false;
         }
