@@ -34,3 +34,5 @@ Route::prefix('/v1')->group(function(){
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
+//获取刷新验证令牌
+Route::any('/getRefreshToken','Api\Auth@getRefreshToken');

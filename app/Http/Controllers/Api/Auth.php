@@ -15,10 +15,14 @@ class Auth extends BaseController
 {
     //认证token有效时间
     private static $expiration = 7200;
+    //refresh_token有效时间
+    private static $refresh_token_ttl = 39528000;
     //获取认证token限流信息，[单位时间内,可刷新的次数]
     public static $quota = [600,10];
     public static $token_key = 'hash';
     public static $token_quota_key = 'user_quota';
+    public static $refresh_token_key = 'refresh_token';
+    public static $refresh_quota_key = 'refresh_quota_token';
     public static function start(){
 
     }
@@ -31,24 +35,51 @@ class Auth extends BaseController
      * Description 获取用户token,用于认证
      */
     public function getToken(Request $request){
-        $user = $request->user;
-        $pass = md5($request->input('pass'));
-        $token_quota_key = str_replace('user',$user,self::$token_quota_key);
-        $n = Redis::get($token_quota_key);
+        $type = request('type');
+        if(empty($type)){
+            $type = 'refresh_token';
+        }
+        switch ($type){
+            case 'pass':
+                $user = $request->user;
+                $pass = md5($request->input('pass'));
+                $token_quota_key = str_replace('user',$user,self::$token_quota_key);
+                $n = Redis::get($token_quota_key);
+                break;
+            case 'refresh_token':
+                $refresh_token = request('refresh_token');
+                if(empty($refresh_token)){
+                    Response::setHeaderCode(401,'old refresh token');
+                    Response::fail('old refresh token','',10010);
+                }
+                $refresh_quota_key = str_replace('token',$refresh_token,self::$refresh_quota_key);
+                $n = Redis::get($refresh_quota_key);
+                break;
+        }
+        //限流代码
         if(!empty($n) && self::quota() && $n > self::$quota[1]){
             Response::setHeaderCode(403,'refresh too fast');
             Response::send_msg('refresh too fast');
         }
-        $user_token = User::getOne(['username'=>$user,'password'=>$pass],['token']);
-        if(empty($user_token)){
-            Response::setHeaderCode(401,'auth faild');
-            Response::fail('auth faild');
-        }else{
-            $token = Hash::make($user_token->token);
-            $token_key = str_replace('hash',$token,self::$token_key);
-            Redis::set($token_key,$user_token->token,self::$expiration);
-            Redis::inc($token_quota_key,1,self::$quota[0]);
+        if($type == 'pass'){
+            $user_info = User::getOne(['username'=>$user,'password'=>$pass],['token']);
+            if(empty($user_info)) {
+                Response::setHeaderCode(401, 'auth faild');
+                Response::fail('auth faild');
+            }
+            $user_token = $user_info->token;
+        }else if($type == 'refresh_token'){
+            $refresh_token_key = str_replace('token',$refresh_token,self::$refresh_token_key);
+            $user_token = Redis::get($refresh_token_key);
+            if(empty($user_token)){
+                Response::setHeaderCode(412,'old refresh token');
+                Response::fail('old refresh token');
+            }
         }
+        $token = Hash::make($user_token);
+        $token_key = str_replace('hash',$token,self::$token_key);
+        Redis::set($token_key,$user_token->token,self::$expiration);
+        Redis::inc($token_quota_key,1,self::$quota[0]);
         Response::setHeaderCode();
         Response::success([
             'token'=>$token,
@@ -104,5 +135,37 @@ class Auth extends BaseController
             'token'=>$token,
         ];
         return User::getField($where,'id');
+    }
+
+    /**
+     *Description 获取refresh_token
+     */
+    public function getRefreshToken(){
+        $user = request('user');
+        $pass = md5(request('pass'));
+        $token_quota_key = str_replace('user',$user,self::$token_quota_key);
+        $n = Redis::get($token_quota_key);
+        //限流操作
+        if(!empty($n) && self::quota() && $n > self::$quota[1]){
+            Response::setHeaderCode(403,'refresh too fast');
+            Response::send_msg('refresh too fast');
+        }
+        $user_token = User::getField([
+            'username'=>$user,
+            'password'=>$pass
+        ],'token');
+        if(empty($user_token)){
+            Response::setHeaderCode(401,'auth fail');
+            Response::fail('auth fail');
+        }
+        $token = Hash::make($user_token);
+        $refresh_token_key = str_replace('token',$token,self::$refresh_token_key);
+        Redis::set($refresh_token_key,$user_token->token,self::$expiration);
+        Redis::inc($token_quota_key,1,self::$quota[0]);
+        Response::setHeaderCode();
+        Response::success([
+            'refresh_token'=>$token,
+            'expirat_in'=>self::$refresh_token_ttl
+        ],'','get refresh_token success');
     }
 }
