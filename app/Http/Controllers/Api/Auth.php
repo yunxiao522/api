@@ -50,7 +50,7 @@ class Auth extends BaseController
                 $refresh_token = request('refresh_token');
                 if(empty($refresh_token)){
                     Response::setHeaderCode(401,'params error');
-                    Response::fail('params error','',10010);
+                    Response::fail('params error','');
                 }
                 $token_quota_key = str_replace('token',$refresh_token,self::$refresh_quota_key);
                 $n = Redis::get($token_quota_key);
