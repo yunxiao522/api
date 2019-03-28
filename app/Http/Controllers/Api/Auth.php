@@ -71,8 +71,8 @@ class Auth extends BaseController
             $refresh_token_key = str_replace('token',$refresh_token,self::$refresh_token_key);
             $user_token = Redis::get($refresh_token_key);
             if(empty($user_token)){
-                Response::setHeaderCode(412,'old refresh token',10010);
-                Response::fail('old refresh token');
+                Response::setHeaderCode(412,'old refresh token');
+                Response::fail('old refresh token','',10010);
             }
         }
         $token = Hash::make($user_token);
