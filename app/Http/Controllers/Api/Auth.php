@@ -16,7 +16,7 @@ class Auth extends BaseController
     //认证token有效时间
     private static $expiration = 7200;
     //refresh_token有效时间
-    private static $refresh_token_ttl = 39528000;
+    private static $refresh_token_ttl = 2678400;
     //获取认证token限流信息，[单位时间内,可刷新的次数]
     public static $quota = [600,10];
     public static $token_key = 'hash';
