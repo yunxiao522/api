@@ -52,8 +52,8 @@ class Auth extends BaseController
                     Response::setHeaderCode(401,'old refresh token');
                     Response::fail('old refresh token','',10010);
                 }
-                $refresh_quota_key = str_replace('token',$refresh_token,self::$refresh_quota_key);
-                $n = Redis::get($refresh_quota_key);
+                $token_quota_key = str_replace('token',$refresh_token,self::$refresh_quota_key);
+                $n = Redis::get($token_quota_key);
                 break;
         }
         //限流代码
