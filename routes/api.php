@@ -15,6 +15,10 @@ Route::prefix('/v1')->group(function(){
     Route::middleware("apiauth::checkAuth")->group(function (){
         //文档、评论的收藏操作
         Route::put('/article/collection/{id}','Api\LikeController@collection')->where(['id'=>'[0-9]+']);
+        //完善账号信息
+        Route::post('/user/perfectAccount','Api\RegisterController@perfectAccount');
+        //获取会员信息
+        Route::get('/user/getInfo','Api\UserController@getUserInfo');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
@@ -30,7 +34,12 @@ Route::prefix('/v1')->group(function(){
     Route::get('/article/getInfo/{id}','Api\ArticleController@getInfo')->where(['id'=>'[0-9]+']);
     //意见反馈
     Route::post('/feedback/push','Api\FeedBackController@push');
-
+    //发送短信验证码
+    Route::post('/sendPhoneCode','Api\UserController@sendPhoneCode');
+    //发送注册短信验证码
+    Route::post('/sendRegisterCode','Api\RegisterController@sendRegisterCode');
+    //账号注册方法
+    Route::post('/register','Api\RegisterController@register');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
