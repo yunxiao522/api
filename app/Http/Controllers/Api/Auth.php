@@ -160,7 +160,7 @@ class Auth extends BaseController
         }
         $token = Hash::make($user_token);
         $refresh_token_key = str_replace('token',$token,self::$refresh_token_key);
-        Redis::set($refresh_token_key,$user_token->token,self::$expiration);
+        Redis::set($refresh_token_key,$user_token,self::$expiration);
         Redis::inc($token_quota_key,1,self::$quota[0]);
         Response::setHeaderCode();
         Response::success([
