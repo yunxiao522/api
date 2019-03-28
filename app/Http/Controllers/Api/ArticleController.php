@@ -43,7 +43,7 @@ class ArticleController extends BaseController
      */
     public function getList()
     {
-        $type = $this->request->type;
+        $type = request('type');
         if (empty($type)) {
             $type = 'undefined';
         }

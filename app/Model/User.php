@@ -12,6 +12,7 @@ namespace App\Model;
 class User extends Base
 {
     public $table = 'user';
+    public static $user_sex = [1=>'男',2=>'女'];
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
