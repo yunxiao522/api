@@ -43,7 +43,8 @@ class UserController extends BaseController
     //获取会员账号信息
     public function getUserInfo(){
         $uid = Auth::getUserId();
-        $user_info = User::getOne(['id'=>$uid],['nickname','face','level','email','qq','gold','experience','sex','description','signature']);
+        $user_info = User::getOne(['id'=>$uid],['nickname','face','level','email','qq','gold','experience','sex','description','signature','create_time']);
+        $user_info->create_time = date('Y-m-d',$user_info->create_time);
         Response::success($user_info);
     }
 }
