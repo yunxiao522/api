@@ -62,12 +62,11 @@ class Auth extends BaseController
             Response::send_msg('refresh too fast');
         }
         if($type == 'pass'){
-            $user_info = User::getOne(['username'=>$user,'password'=>$pass],['token']);
-            if(empty($user_info)) {
+            $user_token= User::getField(['username'=>$user,'password'=>$pass],'token');
+            if(empty($user_token)) {
                 Response::setHeaderCode(401, 'auth faild');
                 Response::fail('auth faild');
             }
-            $user_token = $user_info->token;
         }else if($type == 'refresh_token'){
             $refresh_token_key = str_replace('token',$refresh_token,self::$refresh_token_key);
             $user_token = Redis::get($refresh_token_key);
@@ -78,7 +77,7 @@ class Auth extends BaseController
         }
         $token = Hash::make($user_token);
         $token_key = str_replace('hash',$token,self::$token_key);
-        Redis::set($token_key,$user_token->token,self::$expiration);
+        Redis::set($token_key,$user_token,self::$expiration);
         Redis::inc($token_quota_key,1,self::$quota[0]);
         Response::setHeaderCode();
         Response::success([
