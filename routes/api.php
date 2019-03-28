@@ -19,6 +19,8 @@ Route::prefix('/v1')->group(function(){
         Route::post('/user/perfectAccount','Api\RegisterController@perfectAccount');
         //获取会员信息
         Route::get('/user/getInfo','Api\UserController@getUserInfo');
+        //修改会员信息
+        Route::put('/user/editInfo','Api\UserController@editUserInfo');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
