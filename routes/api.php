@@ -42,6 +42,8 @@ Route::prefix('/v1')->group(function(){
     Route::post('/sendRegisterCode','Api\RegisterController@sendRegisterCode');
     //账号注册方法
     Route::post('/register','Api\RegisterController@register');
+    //获取热门搜索
+    Route::get('/getHotSearch','Api\SearchController@getHotSearch');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
