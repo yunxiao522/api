@@ -81,6 +81,9 @@ class ArticleController extends BaseController
         return Response::success($list);
     }
 
+    /**
+     *Description 获取文档信息
+     */
     public function getInfo(){
         $id = $this->request->route('id');
         $p = request('p');

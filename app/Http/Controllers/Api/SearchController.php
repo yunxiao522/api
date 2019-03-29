@@ -9,7 +9,12 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Model\Article;
+use App\Model\Base;
+use App\Model\Column;
+use App\Model\ColumnType;
 use App\Model\Search;
+use App\Model\SearchColumn;
 use App\Model\SearchHistory;
 use Illuminate\Http\Request;
 
@@ -48,5 +53,37 @@ class SearchController extends BaseController
         }else{
             Response::fail('清空失败');
         }
+    }
+
+    public function search(){
+        $keyword = request('keyword');
+        $type = request('type');
+        $uid = Auth::getUserId();
+        if(!$uid){
+            $uid = 0;
+        }
+        //添加搜索记录
+        $res = SearchHistory::addHistory($keyword,$uid);
+        if(!$res){
+            Response::fail('获取数据失败');
+        }
+        $column_id = SearchColumn::getOne(['id'=>$type],'cid');
+        if(empty($column_id)){
+            $column_id = 54;
+        }
+        $column_list = Column::getAll([],'id,parent_id');
+        $column_son_list = self::getSonList($column_id,$column_list);
+        $list = Article::getListIn(['title','like',"%$keyword%"],['column_id'=>$column_son_list],['id','title','litpic','pubdate','channel','column_id']);
+        //循环查询扩展表信息
+        $base = new Base();
+        foreach($list['data'] as $key => $value){
+            $base->table = ColumnType::getField(['id'=>$value['channel']],'table_name');
+            $list['data'][$key]['type'] = $type;
+            $list['data'][$key]['extend'] = $base->getOne(['article_id'=>$value['id']],'*');
+            $list['data'][$key]['pubdate'] = date('Y-m-d',$value['pubdate']);
+            $list['data'][$key]['column'] = Column::getField(['id'=>$value['column_id']],'type_name');
+            $list['data'][$key]['title'] = self::cut_str($value['title'],14);
+        }
+        Response::success($list);
     }
 }
