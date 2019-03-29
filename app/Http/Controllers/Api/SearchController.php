@@ -92,7 +92,7 @@ class SearchController extends BaseController
         foreach($list['data'] as $key => $value){
             $table = ColumnType::getField(['id'=>$value['channel']],'table_name');
             $list['data'][$key]['type'] = $type;
-            $list['data'][$key]['extend'] = DB::table($table)->where(['article_id'=>$value['id']])->find('*');
+            $list['data'][$key]['extend'] = DB::table($table)->where(['article_id'=>$value['id']])->first();
             $list['data'][$key]['pubdate'] = date('Y-m-d',$value['pubdate']);
             $list['data'][$key]['column'] = Column::getField(['id'=>$value['column_id']],'type_name');
             $list['data'][$key]['title'] = self::cut_str($value['title'],14);
