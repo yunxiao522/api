@@ -44,7 +44,7 @@ class SearchController extends BaseController
         $uid = Auth::getUserId();
         $res = SearchHistory::del(['uid'=>$uid]);
         if($res){
-            Response::success('清空成功');
+            Response::success([],'','清空成功');
         }else{
             Response::fail('清空失败');
         }
