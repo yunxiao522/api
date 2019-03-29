@@ -21,6 +21,8 @@ Route::prefix('/v1')->group(function(){
         Route::get('/user/getInfo','Api\UserController@getUserInfo');
         //修改会员信息
         Route::put('/user/editInfo','Api\UserController@editUserInfo');
+        //获取搜索记录
+        Route::get('/getSearchHistory','Api\SearchController@getHistorySearch');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
