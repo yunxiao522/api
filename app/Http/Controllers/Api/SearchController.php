@@ -17,6 +17,7 @@ use App\Model\Search;
 use App\Model\SearchColumn;
 use App\Model\SearchHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SearchController extends BaseController
 {
@@ -88,11 +89,10 @@ class SearchController extends BaseController
             'column_id'
         ]);
         //循环查询扩展表信息
-        $base = new Base();
         foreach($list['data'] as $key => $value){
-            $base->table = ColumnType::getField(['id'=>$value['channel']],'table_name');
+            $table = ColumnType::getField(['id'=>$value['channel']],'table_name');
             $list['data'][$key]['type'] = $type;
-            $list['data'][$key]['extend'] = $base->getOne(['article_id'=>$value['id']],'*');
+            $list['data'][$key]['extend'] = DB::table($table)->where(['article_id'=>$value['id']])->find('*');
             $list['data'][$key]['pubdate'] = date('Y-m-d',$value['pubdate']);
             $list['data'][$key]['column'] = Column::getField(['id'=>$value['column_id']],'type_name');
             $list['data'][$key]['title'] = self::cut_str($value['title'],14);
