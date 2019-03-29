@@ -17,7 +17,6 @@ use App\Model\Tag;
 use App\Model\TagList;
 use App\Model\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ArticleController extends BaseController
 {
@@ -44,6 +43,7 @@ class ArticleController extends BaseController
     public function getList()
     {
         $type = request('type');
+        dump($type);die;
         if (empty($type)) {
             $type = 'undefined';
         }
