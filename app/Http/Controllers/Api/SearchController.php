@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Model\Search;
+use App\Model\SearchHistory;
 use Illuminate\Http\Request;
 
 class SearchController extends BaseController
@@ -25,5 +26,14 @@ class SearchController extends BaseController
     public function getHotSearch(){
         $list = Search::getList([],'keyword',10,['num','desc']);
         Response::success($list);
+    }
+
+    /**
+     *Description 获取搜索记录
+     */
+    public function getHistorySearch(){
+        $uid = Auth::getUserId();
+        $history_list = SearchHistory::getList(['uid'=>$uid],'keyword',10);
+        Response::success($history_list);
     }
 }
