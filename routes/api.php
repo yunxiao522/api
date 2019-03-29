@@ -48,6 +48,8 @@ Route::prefix('/v1')->group(function(){
     Route::post('/register','Api\RegisterController@register');
     //获取热门搜索
     Route::get('/getHotSearch','Api\SearchController@getHotSearch');
+    //获取搜索结果
+    Route::get('/search','Api\SearchController@search');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
