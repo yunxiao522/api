@@ -36,4 +36,17 @@ class SearchController extends BaseController
         $history_list = SearchHistory::getList(['uid'=>$uid],'keyword',10);
         Response::success($history_list);
     }
+
+    /**
+     * Description 清空搜索历史记录
+     */
+    public function delHistorySearch(){
+        $uid = Auth::getUserId();
+        $res = SearchHistory::del(['uid'=>$uid]);
+        if($res){
+            Response::success('清空成功');
+        }else{
+            Response::fail('清空失败');
+        }
+    }
 }

@@ -23,6 +23,8 @@ Route::prefix('/v1')->group(function(){
         Route::put('/user/editInfo','Api\UserController@editUserInfo');
         //获取搜索记录
         Route::get('/getSearchHistory','Api\SearchController@getHistorySearch');
+        //清空搜索历史记录
+        Route::delete('/delSearchHistory','Api\SearchController@delHistorySearch');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
