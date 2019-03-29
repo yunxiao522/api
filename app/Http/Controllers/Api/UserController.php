@@ -45,7 +45,7 @@ class UserController extends BaseController
      */
     public function getUserInfo(){
         $uid = Auth::getUserId();
-        $user_info = User::getOne(['id'=>$uid],['id','nickname','face','level','email','qq','gold','experience','sex','description','signature','create_time']);
+        $user_info = User::getOne(['id'=>$uid],['id','nickname','face','level','email','qq','gold','experience','sex','description','signature','create_time','phone']);
         $user_info->create_time = date('Y-m-d',$user_info->create_time);
         Response::success($user_info);
     }
