@@ -68,7 +68,7 @@ class SearchController extends BaseController
         if(!$res){
             Response::fail('获取数据失败');
         }
-        $column_id = SearchColumn::getOne(['id'=>$type],'cid');
+        $column_id = SearchColumn::getOne(['id'=>$type],'cid')->toArray();
         if(empty($column_id)){
             $column_id = 54;
         }
