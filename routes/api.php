@@ -35,7 +35,7 @@ Route::prefix('/v1')->group(function(){
     //获取文档列表
     Route::get('/article/getList/{type?}','Api\ArticleController@getList');
     //获取下级栏目列表
-    Route::get('/column/getSonList/{id}','Api\ColumnController@getSonList')->where(['id'=>'[0-9]+']);
+    Route::get('/column/getSonList/{id}','Api\ColumnController@getSonLists')->where(['id'=>'[0-9]+']);
     //获取文档信息
     Route::get('/article/getInfo/{id}','Api\ArticleController@getInfo')->where(['id'=>'[0-9]+']);
     //意见反馈

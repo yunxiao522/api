@@ -22,7 +22,7 @@ class ColumnController extends BaseController
     /**
      * Description 获取下级栏目列表
      */
-    public function getSonList(){
+    public function getSonLists(){
         $id = $this->request->route('id');
         if(empty($id) || !is_numeric($id)){
             return Response::fail('参数错误');
