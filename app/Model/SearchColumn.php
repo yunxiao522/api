@@ -11,7 +11,7 @@ namespace App\Model;
 
 class SearchColumn extends Base
 {
-    public $table;
+    public $table = 'search_column';
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
