@@ -73,7 +73,20 @@ class SearchController extends BaseController
         }
         $column_list = Column::getAll([],['id','parent_id']);
         $column_son_list = self::getSonList($column_id,$column_list);
-        $list = Article::getListIn([['title','like','%'.$keyword.'%']],['column_id',$column_son_list],['id','title','litpic','pubdate','channel','column_id']);
+        $where = [
+            ['title','like','%'.$keyword.'%']
+        ];
+        $whereIn = [
+            'column_id',$column_son_list
+        ];
+        $list = Article::getListIn($where,$whereIn,[
+            'id',
+            'title',
+            'litpic',
+            'pubdate',
+            'channel',
+            'column_id'
+        ]);
         //循环查询扩展表信息
         $base = new Base();
         foreach($list['data'] as $key => $value){
