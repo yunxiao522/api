@@ -61,7 +61,7 @@ class UserController extends BaseController
         $uid = Auth::getUserId();
         $res = User::edit(['id'=>$uid],$data);
         if($res){
-            Response::success('修改成功');
+            Response::success([],'','修改成功');
         }else{
             Response::fail('修改失败');
         }
