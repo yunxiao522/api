@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,6 +24,10 @@ Route::prefix('/v1')->group(function(){
         Route::get('/getSearchHistory','Api\SearchController@getHistorySearch');
         //清空搜索历史记录
         Route::delete('/delSearchHistory','Api\SearchController@delHistorySearch');
+        //修改账号密码
+        Route::put('/editPassword','Api\UserController@editPassword');
+        //修改账号邮箱
+        Route::put('/editEmail','Api\UserController@editEmail');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');

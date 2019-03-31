@@ -99,4 +99,49 @@ class UserController extends BaseController
         return $data;
     }
 
+    /**
+     *Description 修改账号密码
+     */
+    public function editPassword(){
+        $oldpwd = request('oldpwd');
+        $newpwd = request('newpwd');
+        $verifypwd = request('verifypwd');
+        if(empty($oldpwd)){
+            Response::fail('参数错误');
+        }
+        if(empty($newpwd)){
+            Response::fail('参数错误');
+        }
+        if(empty($verifypwd)){
+            Response::fail('参数错误');
+        }
+        if($newpwd != $verifypwd){
+            Response::fail('两次输入的密码不一致');
+        }
+        $uid = Auth::getUserId();
+        $user_pwd = User::getField(['id'=>$uid],'password');
+        if($user_pwd != self::getPwd($oldpwd)){
+            Response::fail('原密码不正确');
+        }
+        $res = User::edit(['id'=>$uid],['password'=>self::getPwd($newpwd)]);
+        if($res){
+            Response::success([],'','修改成功');
+        }else{
+            Response::fail('修改失败');
+        }
+    }
+
+    public function editEmail(){
+        $email = request('email');
+        $code = request('code');
+
+        $uid = Auth::getUserId();
+        $res = User::edit(['id'=>$uid],['email'=>$email]);
+        if($res){
+            Response::success('','','修改成功');
+        }else{
+            Response::fail('修改失败');
+        }
+    }
+
 }
