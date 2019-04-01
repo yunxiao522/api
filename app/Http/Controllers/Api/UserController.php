@@ -55,7 +55,7 @@ class UserController extends BaseController
 //                'content' => "您的验证码为$code ，请于10分钟内正确输入，如非本人操作，请忽略此短信。"
 //            ]);
         //code存入redis
-        $sms_code_key = str_replace(['uid','phone'],[$uid,$phone],$this->sms_code_key);
+        $sms_code_key = str_replace(['uid','phone'],[Auth::getUserId(),$phone],$this->sms_code_key);
         Redis::set($sms_code_key,$code,$this->sms_code_ttl);
         if(true){
             Response::success(['code'=>$code],'','发送成功');
