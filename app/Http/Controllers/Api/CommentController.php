@@ -11,7 +11,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\Comment;
 use App\Model\CommentOperate;
-use Dotenv\Validator;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
