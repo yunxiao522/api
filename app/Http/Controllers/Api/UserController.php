@@ -31,8 +31,13 @@ class UserController extends BaseController
 
         $validator = Validator::make($this->request->all(),[
             'phone'=>'required|phone',
-        ],[]);
-        dump($validator->fails());die;
+        ],[
+            'phone.required'=>'手机号码不能为空',
+            'phone.phone'=>'手机号码格式不正确'
+        ]);
+        if($validator->fails()){
+            dump($validator->errors());
+        };die;
         $phone = request('phone');
         $uid = User::getField(['phone'=>$phone],'id');
         if(!empty($uid)){
