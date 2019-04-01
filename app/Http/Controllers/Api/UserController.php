@@ -28,11 +28,13 @@ class UserController extends BaseController
      * Description 发送手机验证码
      */
     public function sendPhoneCode(){
-        $phone = request('phone');
-        $uid = User::getField(['phone'=>$phone],'id');
+
         Validator::make($this->request->all(),[
             'phone'=>'required|phone',
-        ]);
+        ],[]);
+        dump(Validator::$error);die;
+        $phone = request('phone');
+        $uid = User::getField(['phone'=>$phone],'id');
         if(!empty($uid)){
             Response::fail('该手机号已经绑定过其他账号');
         }
