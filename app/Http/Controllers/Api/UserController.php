@@ -306,7 +306,7 @@ class UserController extends BaseController
     </tbody>
 </table>';
         $email_key = str_replace(['uid','email'],[Auth::getUserId(),$email],$this->email_code_key);
-        Redis::set($email_key,$content,$this->email_code_ttl);
+        Redis::set($email_key,$code,$this->email_code_ttl);
         $res = Email::sendEmail(
             $email,
             '素材站',
