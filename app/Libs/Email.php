@@ -59,7 +59,6 @@ class Email
             'create_time' => time(),
             'status' => 3
         ]);
-        dump($email_id);
         //发送结果
         $status = $mail->send();
         if ($status) {
