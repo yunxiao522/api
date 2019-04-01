@@ -32,7 +32,7 @@ class UserController extends BaseController
         $validator = Validator::make($this->request->all(),[
             'phone'=>'required|phone',
         ],[]);
-        dump($validator->error);die;
+        dump($validator->fails());die;
         $phone = request('phone');
         $uid = User::getField(['phone'=>$phone],'id');
         if(!empty($uid)){
