@@ -28,12 +28,13 @@ class UserController extends BaseController
      * Description 发送手机验证码
      */
     public function sendPhoneCode(){
-
+        //验证数据
         $validator = Validator::make($this->request->all(),[
             'phone'=>'required|phone',
+            'code'=>'required'
         ],[
             'phone.required'=>'手机号码不能为空',
-            'phone.phone'=>'手机号码格式不正确'
+            'phone.phone'=>'手机号码格式不正确',
         ]);
         if($validator->fails()){
             Response::fail($validator->errors()->first());
@@ -45,20 +46,20 @@ class UserController extends BaseController
         }
         //获取手机短信code
         $code = Sms::getCode();
-        $res = Sms::sendSms($phone,
-            '素材站',
-            $this->send_code,
-            ['code'=>$code],
-            [
-                'uid' => Auth::getUserId(),
-                'title' => '手机短信激活码',
-                'content' => "您的验证码为$code ，请于10分钟内正确输入，如非本人操作，请忽略此短信。"
-            ]);
+//        $res = Sms::sendSms($phone,
+//            '素材站',
+//            $this->send_code,
+//            ['code'=>$code],
+//            [
+//                'uid' => Auth::getUserId(),
+//                'title' => '手机短信激活码',
+//                'content' => "您的验证码为$code ，请于10分钟内正确输入，如非本人操作，请忽略此短信。"
+//            ]);
         //code存入redis
         $sms_code_key = str_replace(['uid','phone'],[$uid,$phone],$this->sms_code_key);
         Redis::set($sms_code_key,$code,$this->sms_code_ttl);
-        if($res){
-            Response::success([],'','发送成功');
+        if(true){
+            Response::success(['code'=>$code],'','发送成功');
         }else{
             Response::fail('发送失败');
         }
