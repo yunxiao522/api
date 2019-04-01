@@ -30,8 +30,7 @@ class UserController extends BaseController
     public function sendPhoneCode(){
         //验证数据
         $validator = Validator::make($this->request->all(),[
-            'phone'=>'required|phone',
-            'code'=>'required'
+            'phone'=>'required|phone'
         ],[
             'phone.required'=>'手机号码不能为空',
             'phone.phone'=>'手机号码格式不正确',
