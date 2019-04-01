@@ -19,7 +19,7 @@
  */
 
 namespace App\Libs\mailer;
-use mailer\Exception;
+use App\Libs\mailer\Exception;
 
 /**
  * PHPMailer - PHP email creation and transport class.
