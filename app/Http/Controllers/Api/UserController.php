@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Api;
 use App\Libs\Sms;
 use App\Model\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController
 {
@@ -29,6 +30,9 @@ class UserController extends BaseController
     public function sendPhoneCode(){
         $phone = request('phone');
         $uid = User::getField(['phone'=>$phone],'id');
+        Validator::make($this->request,[
+            'phone'=>'required|phone',
+        ]);
         if(!empty($uid)){
             Response::fail('该手机号已经绑定过其他账号');
         }

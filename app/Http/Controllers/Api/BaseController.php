@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BaseController extends Controller
 {
@@ -19,6 +20,10 @@ class BaseController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
+        //添加验证规则
+        Validator::extend('phone',function($attribute, $value, $parameters, $validator){
+            return preg_match('/^1[345678]\d{9}$/', $value);
+        });
     }
 
     /**
