@@ -171,6 +171,16 @@ class UserController extends BaseController
      * Description 修改手机号方法
      */
     public function editPhone(){
+        Validator::make($this->request->all(),[
+            'phone'=>'required|phone',
+            'code'=>'required|numeric|sms_code',
+        ],[
+            'phone.required'=>'输入的手机号码不能为空',
+            'phone.phone'=>'输入的手机号码格式不正确',
+            'code.required'=>'验证码不能为空',
+            'code.numeric'=>'验证码必须是数字',
+            'code.sms_code'=>'验证码为6位数字'
+        ]);
         $phone = request('phone');
         $code = request('code');
         //从redis中取出发送的短信验证码

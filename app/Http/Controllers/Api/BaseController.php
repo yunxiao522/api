@@ -24,6 +24,13 @@ class BaseController extends Controller
         Validator::extend('phone',function($attribute, $value, $parameters, $validator){
             return preg_match('/^1[345678]\d{9}$/', $value);
         });
+        Validator::extend('sms_code',function ($a,$v,$p,$validator){
+            if(mb_strlen($v,'UTF-8') != 6){
+                return false;
+            }else{
+                return true;
+            }
+        });
     }
 
     /**
