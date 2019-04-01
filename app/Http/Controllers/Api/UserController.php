@@ -29,10 +29,10 @@ class UserController extends BaseController
      */
     public function sendPhoneCode(){
 
-        Validator::make($this->request->all(),[
+        $validator = Validator::make($this->request->all(),[
             'phone'=>'required|phone',
         ],[]);
-        dump(Validator::$error);die;
+        dump($validator->error);die;
         $phone = request('phone');
         $uid = User::getField(['phone'=>$phone],'id');
         if(!empty($uid)){
