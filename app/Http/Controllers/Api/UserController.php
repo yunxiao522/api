@@ -197,7 +197,7 @@ class UserController extends BaseController
         }
         $res = User::edit(['id'=>Auth::getUserId()],['phone'=>$phone],true);
         if($res){
-            Response::success('换绑成功');
+            Response::success([],'','绑定成功');
         }else{
             Response::fail('换绑失败');
         }
