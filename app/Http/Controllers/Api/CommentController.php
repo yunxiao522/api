@@ -101,6 +101,7 @@ class CommentController extends BaseController
             'uid'=>$uid
         ];
         $count = CommentOperate::getField($where,'uid');
+        dump($count);
         DB::beginTransaction();
         if(!empty($count)){
             //删除对应评论操作
