@@ -129,8 +129,7 @@ class CommentController extends BaseController
             }
             //更新评论表字段值
             $res = Comment::incr(['id'=>$comment_id],$field,1);
-            dump($res);
-            if($res){
+            if(!$res){
                 DB::rollBack();
                 Response::fail('投票失败');
             }
