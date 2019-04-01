@@ -31,6 +31,13 @@ class BaseController extends Controller
                 return true;
             }
         });
+        Validator::extend('email_code',function ($a,$v,$p,$validator){
+            if(mb_strlen($v ,'UTF-8') != 6){
+                return false;
+            }else{
+                return true;
+            }
+        });
     }
 
     /**

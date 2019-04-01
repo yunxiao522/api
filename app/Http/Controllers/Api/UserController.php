@@ -19,6 +19,8 @@ class UserController extends BaseController
 {
     public $sms_code_key = 'uid_phone_code';
     public $sms_code_ttl = 600;
+    public $email_code_key = 'uid_email_code';
+    public $email_code_ttl = 600;
     private $send_code = 'SMS_133000964';
 
     public function __construct(Request $request)
@@ -219,15 +221,37 @@ class UserController extends BaseController
     }
 
     /*
-     * Description 修改邮箱账号方法
+     * Description 修改邮箱账号
      */
     public function editEmail()
     {
+        $vaildator = Validator::make($this->request->all(),[
+            'email'=>'required|email',
+            'code'=>'required'
+        ],[
+            'email.required'=>'请输入邮箱地址',
+            'email.email'=>'邮箱格式不正确',
+            'code.required'=>'邮箱验证码不能为空',
+            'code.email_code'=>'邮箱验证码为6为数字'
+        ]);
+        if($vaildator->fails()){
+            Response::fail($vaildator->errors()->first());
+        }
         $email = request('email');
+        $user_email = User::getField(['id'=>Auth::getUserId()],'email');
+        if($user_email == $email){
+            Response::fail('不能重复绑定邮箱');
+        }
         $code = request('code');
-
-        $uid = Auth::getUserId();
-        $res = User::edit(['id' => $uid], ['email' => $email]);
+        $email_key = str_replace(['uid','email'],[Auth::getUserId(),$email],$this->email_code_key);
+        $email_code = Redis::get($email_key);
+        if(empty($email_code)){
+            Response::fail('验证码已经过期了');
+        }
+        if($code != $email_code){
+            Response::fail('验证码不正确');
+        }
+        $res = User::edit(['id' => Auth::getUserId()], ['email' => $email]);
         if ($res) {
             Response::success('', '', '修改成功');
         } else {
@@ -235,6 +259,9 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * Description 发送邮箱验证码
+     */
     public function sendEmailCode()
     {
         $validator = Validator::make($this->request->all(), [
@@ -278,6 +305,8 @@ class UserController extends BaseController
     </tr>
     </tbody>
 </table>';
+        $email_key = str_replace(['uid','email'],[Auth::getUserId(),$email],$this->email_code_key);
+        Redis::set($email_key,$content,$this->email_code_ttl);
         $res = Email::sendEmail(
             $email,
             '素材站',
@@ -288,7 +317,7 @@ class UserController extends BaseController
                 'title'=>$title
             ]);
         if($res){
-            Response::success('发送成功');
+            Response::success([],'','发送成功');
         }else{
             Response::fail('发送失败');
         }
