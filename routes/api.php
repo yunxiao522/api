@@ -29,7 +29,7 @@ Route::prefix('/v1')->group(function(){
         //修改账号邮箱
         Route::put('/user/editEmail','Api\UserController@editEmail');
         //修改账号邮箱-发送邮箱验证码
-        Route::post('/uset/sendEmail','Api\UserController@sendEmailCode');
+        Route::post('/user/sendEmail','Api\UserController@sendEmailCode');
         //修改手机号码
         Route::put('/user/editPhone','Api\UserController@editPhone');
         //修改手机号码-发送手机短信
