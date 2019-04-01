@@ -12,7 +12,7 @@ namespace App\Http\Controllers\Api;
 use App\Libs\Sms;
 use App\Model\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends BaseController
 {
