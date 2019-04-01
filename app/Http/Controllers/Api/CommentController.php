@@ -139,4 +139,11 @@ class CommentController extends BaseController
         DB::commit();
         Response::success(['num'=>$num,'type'=>$class],'','投票成功');
     }
+
+    /**
+     * Description 发布评论
+     */
+    public function push(){
+
+    }
 }
