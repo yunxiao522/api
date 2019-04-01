@@ -10,11 +10,11 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Model\User;
-use App\Model\UserSms;
 use Illuminate\Http\Request;
 
 class UserController extends BaseController
 {
+    public $sms_code_key = 'uid_phone_code';
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -131,6 +131,32 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * Description 修改手机号方法
+     */
+    public function editPhone(){
+        $phone = request('phone');
+        $code = request('code');
+        //从redis中取出发送的短信验证码
+        $key = str_replace(['phone','uid'],[$phone,Auth::getUserId()],$this->sms_code_key);
+        $sms_code = Redis::get($key);
+        if(empty($sms_code)){
+            Response::fail('验证码已经过期');
+        }
+        if($code != $sms_code){
+            Response::fail('验证码不正确');
+        }
+        $res = User::edit(['id'=>Auth::getUserId()],['phone'=>$phone],true);
+        if($res){
+            Response::success('换绑成功');
+        }else{
+            Response::fail('换绑失败');
+        }
+    }
+
+    /*
+     * Description 修改邮箱账号方法
+     */
     public function editEmail(){
         $email = request('email');
         $code = request('code');

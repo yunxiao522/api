@@ -28,6 +28,8 @@ Route::prefix('/v1')->group(function(){
         Route::put('/editPassword','Api\UserController@editPassword');
         //修改账号邮箱
         Route::put('/editEmail','Api\UserController@editEmail');
+        //修改手机号码
+        Route::put('/editPhone','Api\UserController@editPhone');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
