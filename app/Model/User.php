@@ -17,4 +17,9 @@ class User extends Base
     {
         parent::__construct($attributes);
     }
+
+    public static function edit($where = [],$data = []){
+        $data['alter_time'] = time();
+        return parent::edit($where,$data);
+    }
 }
