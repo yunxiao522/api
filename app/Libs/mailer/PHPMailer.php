@@ -18,7 +18,7 @@
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-namespace mailer;
+namespace App\Libs\mailer;
 use mailer\Exception;
 
 /**

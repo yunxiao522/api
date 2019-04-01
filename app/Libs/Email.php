@@ -5,7 +5,7 @@ namespace App\Libs;
 
 use App\Libs\sucaiz\Config;
 use App\Model\UserEmail;
-use mailer\PHPMailer;
+use App\Libs\mailer\PHPMailer;
 
 class Email
 {
