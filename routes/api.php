@@ -25,11 +25,14 @@ Route::prefix('/v1')->group(function(){
         //清空搜索历史记录
         Route::delete('/delSearchHistory','Api\SearchController@delHistorySearch');
         //修改账号密码
-        Route::put('/editPassword','Api\UserController@editPassword');
+        Route::put('/user/editPassword','Api\UserController@editPassword');
         //修改账号邮箱
-        Route::put('/editEmail','Api\UserController@editEmail');
+        Route::put('/user/editEmail','Api\UserController@editEmail');
         //修改手机号码
-        Route::put('/editPhone','Api\UserController@editPhone');
+        Route::put('/user/editPhone','Api\UserController@editPhone');
+        //修改手机号码-发送手机短信
+        Route::post('/user/sendSms','Api\UserController@sendPhoneCode');
+
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');

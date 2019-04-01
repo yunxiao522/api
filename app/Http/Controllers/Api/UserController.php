@@ -9,22 +9,47 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Libs\Sms;
 use App\Model\User;
 use Illuminate\Http\Request;
 
 class UserController extends BaseController
 {
     public $sms_code_key = 'uid_phone_code';
+    public $sms_code_ttl = 600;
+    private $send_code = 'SMS_133000964';
     public function __construct(Request $request)
     {
         parent::__construct($request);
     }
 
+    /**
+     * Description 发送手机验证码
+     */
     public function sendPhoneCode(){
         $phone = request('phone');
         $uid = User::getField(['phone'=>$phone],'id');
         if(!empty($uid)){
             Response::fail('该手机号已经绑定过其他账号');
+        }
+        //获取手机短信code
+        $code = Sms::getCode();
+        $res = Sms::sendSms($phone,
+            '素材站',
+            $this->send_code,
+            ['code'=>$code],
+            [
+                'uid' => Auth::getUserId(),
+                'title' => '手机短信激活码',
+                'content' => "您的验证码为$code ，请于10分钟内正确输入，如非本人操作，请忽略此短信。"
+            ]);
+        //code存入redis
+        $sms_code_key = str_replace(['uid','phone'],[$uid,$phone],$this->sms_code_key);
+        Redis::set($sms_code_key,$code,$this->sms_code_ttl);
+        if($res){
+            Response::success([],'','发送成功');
+        }else{
+            Response::fail('发送失败');
         }
     }
 
