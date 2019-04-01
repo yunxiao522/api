@@ -34,6 +34,10 @@ Route::prefix('/v1')->group(function(){
         Route::put('/user/editPhone','Api\UserController@editPhone');
         //修改手机号码-发送手机短信
         Route::post('/user/sendSms','Api\UserController@sendPhoneCode');
+        //评论点赞操作
+        Route::post('/comment/praiser','Api\CommentController@praiser');
+        //评论反对操作
+        Route::post('/comment/oppose','Api\CommentController@oppose');
 
     });
     //访问记录
