@@ -36,7 +36,7 @@ class UserController extends BaseController
             'phone.phone'=>'手机号码格式不正确'
         ]);
         if($validator->fails()){
-            dump($validator->errors());
+            dump($validator->errors()->first());
         };die;
         $phone = request('phone');
         $uid = User::getField(['phone'=>$phone],'id');
