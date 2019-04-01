@@ -123,13 +123,13 @@ class CommentController extends BaseController
                 'type'=>$type,
                 'create_time'=>time()
             ]);
-            dump($res);
             if(!$res){
                 DB::rollBack();
                 Response::fail('投票失败');
             }
             //更新评论表字段值
             $res = Comment::incr(['id'=>$comment_id],$field,1);
+            dump($res);
             if($res){
                 DB::rollBack();
                 Response::fail('投票失败');
