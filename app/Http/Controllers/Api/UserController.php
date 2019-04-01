@@ -39,6 +39,11 @@ class UserController extends BaseController
             Response::fail($validator->errors()->first());
         };
         $phone = request('phone');
+        //判断是否与现在绑定手机号一致
+        $user_info = User::getOne(['id'=>Auth::getUserId()],'phone');
+        if($user_info['phone'] == $phone){
+            Response::fail('不能重复绑定手机号');
+        }
         $uid = User::getField(['phone'=>$phone],'id');
         if(!empty($uid)){
             Response::fail('该手机号已经绑定过其他账号');
