@@ -39,6 +39,9 @@
             "database/seeds",
             "database/factories",
             "app/libs/"
+        ],
+        "files": [
+            "app/helpers.php"
         ]
     },
     "autoload-dev": {

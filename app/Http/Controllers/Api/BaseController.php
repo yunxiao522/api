@@ -65,4 +65,8 @@ class BaseController extends Controller
         }
     }
 
+    public static function config(){
+
+    }
+
 }
