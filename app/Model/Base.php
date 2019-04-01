@@ -81,7 +81,7 @@ class Base extends Model
      */
     public static function add($data)
     {
-        return self::insert($data);
+        return self::InsertGetId($data);
     }
 
     /**
