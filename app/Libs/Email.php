@@ -51,7 +51,6 @@ class Email
         $mail->Subject = $title;
         //添加邮件正文
         $mail->Body = $content;
-        dump($mail);
         $email_id = self::addEmailData([
             'address' => $address,
             'uid' => $data['uid'],
@@ -60,6 +59,7 @@ class Email
             'create_time' => time(),
             'status' => 3
         ]);
+        dump($email_id);
         //发送结果
         $status = $mail->send();
         if ($status) {
