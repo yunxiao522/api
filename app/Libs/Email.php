@@ -51,6 +51,7 @@ class Email
         $mail->Subject = $title;
         //添加邮件正文
         $mail->Body = $content;
+        dump($mail);
         $email_id = self::addEmailData([
             'address' => $address,
             'uid' => $data['uid'],
