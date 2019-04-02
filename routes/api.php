@@ -42,7 +42,8 @@ Route::prefix('/v1')->group(function(){
         Route::post('/comment/push','Api\CommentController@push');
         //获取我的评论
         Route::get('/comment/getMyComment','Api\CommentController@getMyComment');
-
+        //获取我的下载
+        Route::get('/down/getMyDown','Api\DownController@getMyDown');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
