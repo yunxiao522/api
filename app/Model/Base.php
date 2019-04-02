@@ -207,7 +207,7 @@ class Base extends Model
     {
         if($method == 'cache'){
             dump($parameters);
-            dump(self::newBaseQueryBuilder());
+            dump(static::class);
             switch ($parameters[0]){
                 case 'getOne':
 
