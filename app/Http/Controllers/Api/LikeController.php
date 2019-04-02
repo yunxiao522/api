@@ -8,15 +8,14 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Model\Article;
 use App\Model\ArticleImages;
+use App\Model\Column;
 use App\Model\MyLike;
 use Illuminate\Http\Request;
 
 class LikeController extends BaseController
 {
-    private $like_type = [1=>'文档',2=>'评论'];
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -35,7 +34,8 @@ class LikeController extends BaseController
         $p = empty($p) || $p == 'undefined' ? 0 : $p;
         $type = request('type');
         $type = empty($type) ? 1 : $type;
-        if(!isset($this->like_type[$type])){
+
+        if(!isset(MyLike::$like_type[$type])){
             return Response::fail('参数错误');
         }
         //查询是否已经有过收藏操作
@@ -85,4 +85,48 @@ class LikeController extends BaseController
             return Response::fail('收藏失败');
         }
     }
+
+    /**
+     * Description 获取我的收藏数据
+     */
+    public function getMyLike(){
+        $type = request('type');
+        if(empty($type) || !isset(MyLike::$like_class[$type])){
+            Response::fail('参数错误');
+        }
+        $column_son_list = Column::getAll(['parent_id'=>MyLike::$like_class[$type]['column_id']],'id',1000);
+        $column_son_list = array_column($column_son_list,'id');
+        $column_son_list[] = MyLike::$like_class[$type]['column_id'];
+        //获取收藏列表数据
+        $where  = [
+            'uid'=>Auth::getUserId()
+        ];
+        $whereIn = [
+            ['channel','in',$column_son_list]
+        ];
+        $list = MyLike::getListIn($where,$whereIn,['article_id','alone','id','channel']);
+        //循环列表数据
+        foreach($list['data'] as $key => $value){
+            //匹配图像正则方法
+            $src_rule = "/(href|src)=([\"|']?)([^\"'>]+.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG))/i";
+            //根据$type值获取文档信息
+            if($type == 1 || $type == 3){
+                $img = ArticleImages::getField(['article_id'=>$value['article_id']],'imgurls');
+                $img_arr = explode(',',$img);
+                $img_url = $img_arr[$value['alone']];
+                preg_match($src_rule,$img_url,$match);
+                $list['data'][$key]['img_url'] = $match[3];
+                $title = Article::getField(['id'=>$value['article_id']],'title');
+                $list['data'][$key]['title'] = $title;
+            }else if($type == 2){
+                $article_info = Article::getOne(['id'=>$value['article_id']],['title','id','litpic','pubdate']);
+                $article_info['pubdate'] = date('Y-m-d',$article_info['pubdate']);
+                $article_info['column'] = Column::getField(['id'=>$value['channel']],'type_name');
+                $list['data'][$key]['article_info'] = $article_info;
+            }
+        }
+        Response::success($list,'','获取数据成功');
+    }
+
+
 }
