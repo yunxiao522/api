@@ -205,6 +205,7 @@ class Base extends Model
 
     public static function __callStatic($method, $parameters)
     {
+        dump($method);
         if($method ==  'getOne'){
             dump(1);
         }
