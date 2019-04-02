@@ -47,7 +47,7 @@ class ArticleController extends BaseController
             $type = 'undefined';
         }
         $where = [];
-        $whereIn = ['',''];
+        $whereIn = [1,1];
         //组合查询条件
         if ($type != "undefined") {
             if ($type == 24) {
