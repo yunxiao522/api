@@ -44,6 +44,8 @@ Route::prefix('/v1')->group(function(){
         Route::get('/comment/getMyComment','Api\CommentController@getMyComment');
         //获取我的下载
         Route::get('/down/getMyDown','Api\DownController@getMyDown');
+        //获取我的收藏
+        Route::get('/like/getMyLike','Api\LikeController@getMyLike');
     });
     //访问记录
     Route::post('/visit','Api\Visit@visit');
