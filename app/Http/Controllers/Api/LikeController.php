@@ -49,7 +49,7 @@ class LikeController extends BaseController
             //删除收藏操作
             $res = MyLike::del(['id'=>$like_id]);
             if($res){
-                return Response::success('取消收藏成功','',2);
+                return Response::success([],'','取消收藏成功');
             }else{
                 return Response::fail('取消收藏失败');
             }
@@ -80,7 +80,7 @@ class LikeController extends BaseController
             'class_id'=>1
         ]);
         if($res){
-            return Response::success('收藏成功 ','',1);
+            return Response::success([],'','收藏成功');
         }else{
             return Response::fail('收藏失败');
         }
