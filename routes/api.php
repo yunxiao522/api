@@ -39,7 +39,9 @@ Route::prefix('/v1')->group(function(){
         //评论反对操作
         Route::post('/comment/oppose','Api\CommentController@oppose');
         //发表评论
-        Route::post('/comment/push','Api\Commentontroller@push');
+        Route::post('/comment/push','Api\CommentController@push');
+        //获取我的评论
+        Route::get('/comment/getMyComment','Api\CommentController@getMyComment');
 
     });
     //访问记录
