@@ -35,7 +35,7 @@ class Base extends Model
      */
     public static function getOne($where, $field = '*' ,$order = ['id','desc'])
     {
-        return self::cache('getOne',self::$cache_ttl)->where($where)->orderBy($order[0],$order[1])->first($field);
+        return self::where($where)->orderBy($order[0],$order[1])->first($field)->cache('getOne',self::$cache_ttl);
     }
 
 
@@ -207,7 +207,6 @@ class Base extends Model
     {
         if($method == 'cache'){
             dump($parameters);
-            dump(static::class);
             switch ($parameters[0]){
                 case 'getOne':
 
