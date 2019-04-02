@@ -9,8 +9,10 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Model\Article;
 use App\Model\Comment;
 use App\Model\CommentOperate;
+use App\Model\User;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -145,5 +147,86 @@ class CommentController extends BaseController
      */
     public function push(){
 
+    }
+
+    /**
+     *Description 获取我的评论
+     */
+    public function getMyComment(){
+        $type = request('type');
+        $limit = request('limit');
+        //验证处理数据
+        if(empty($type) || !isset(Comment::$comment_type[$type])){
+            Response::success([],'','数据为空');
+        }
+        $limit = !empty($limit) && is_numeric($limit) ? $limit : $this->limit;
+        //组合查询条件
+        $where['status'] = 1;
+        $where[] = ['inform','<',5];
+        $where['uid'] = Auth::getUserId();
+        switch ($type){
+            case 1:
+                $where = [
+                    'uid'=>Auth::getUserId(),
+                    'parent_id'=>0,
+                ];
+                $list = Comment::getList($where,'*',$limit);
+                break;
+            case 2:
+                $where = [
+                    'uid'=>Auth::getUserId(),
+                    ['parent_id','<>',0],
+                ];
+                $list = Comment::getList($where,'*',$limit);
+                break;
+            case 3:
+                $my_comment_list = Comment::getAll($where,'id',100000);
+                $comment_ids = array_column($my_comment_list,'id','id');
+                unset($where['uid']);
+                $where[] = ['uid','<>',Auth::getUserId()];
+                $whereIn = [
+                    ['parent_id','in',$comment_ids]
+                ];
+                $list = Comment::getListIn($where,$whereIn,'*',$limit);
+                break;
+        }
+        //循环处理列表数据
+        foreach($list['data'] as $key => $value){
+            $list['data'][$key]['create_time'] = date('Y-m-d H:i:s',$value['create_time']);
+            $list['data'][$key]['article_info']['title'] = cut_str(Article::getField(['id'=>$value['aid']],'title'),16);
+            $list['data'][$key]['article_info']['url'] = $this->getArticleUrl($value['aid'],0,true,true);
+            $list['data'][$key]['oppose'] = $this->checkUserCommentOperateStatus($value['id'],2) ? '取消('.$value['oppose'].')' : '反对('.$value['oppose'].')';
+            $list['data'][$key]['praiser'] = $this->checkUserCommentOperateStatus($value['id'],1) ? '取消('.$value['praiser'].')' : '支持('.$value['praiser'].')';
+            if($type == 3){
+                $list['data'][$key]['nickname'] = User::getField(['id'=>$value['uid']],'nickname');
+                $list['data'][$key]['main'] = Comment::getOne(['id'=>$value['parent_id']],'*');
+                $list['data'][$key]['main']['create_time'] = date('Y-m-d H:i:s',$list['data'][$key]['main']['create_time']);
+                $list['data'][$key]['main']['oppose'] = $this->checkUserCommentOperateStatus($list['data'][$key]['main']['id'],2) ? '取消('.$list['data'][$key]['main']['oppose'].')' : '反对('.$list['data'][$key]['main']['oppose'].')';
+                $list['data'][$key]['main']['praiser'] = $this->checkUserCommentOperateStatus($list['data'][$key]['main']['id'],1) ? '取消('.$list['data'][$key]['main']['praiser'].')' : '支持('.$list['data'][$key]['main']['praiser'].')';
+            }
+        }
+        Response::success($list,'','获取数据成功');
+    }
+
+    /**
+     * @param $comment_id
+     * @param $type
+     * @return bool
+     * Description 获取评论的投票状态
+     */
+    private function checkUserCommentOperateStatus($comment_id,$type){
+        //组合查询条件
+        $where = [
+            'comment_id'=>$comment_id,
+            'type'=>$type,
+            'uid'=>Auth::getUserId()
+        ];
+        //查询条件
+        $count = CommentOperate::getCount($where,'uid');
+        if(!empty($count)){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
