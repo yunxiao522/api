@@ -11,8 +11,6 @@ namespace App\Model;
 
 use App\Http\Controllers\Api\Redis;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class Base extends Model
 {
