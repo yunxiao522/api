@@ -108,7 +108,7 @@ class Base extends Model
      */
     public static function getCount($where, $field = '')
     {
-        $field = empty($field) ? self::$pk : $field;
+        $field = empty($field) ? '' : $field;
         return self::where($where)->count($field);
     }
 
