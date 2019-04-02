@@ -128,7 +128,7 @@ class Base extends Model
         }
         $limit = $limit == 0 || $limit >= self::$limit ? self::$limit : $limit;
         $limits = ($page - 1) * $limit;
-        $res = self::where($where)->skip($limits)->take($limit)->orderBy($order[0], $order[1])->get($field);
+        $res = self::where($where)->skip($limits)->take($limit)->orderBy($order[0], $order[1])->get($field)->toArray();
         $count = self::getCount($where);
         return [
             'count' => $count,
