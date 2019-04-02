@@ -18,7 +18,7 @@ class Base extends Model
     public $table;
     private $cache_ttl = 600;
     public $primaryKey = 'id';
-    private static $pk = 'id';
+    public static $pk = 'id';
     public $timestamps = false;
     public static $limit = 20;
 
