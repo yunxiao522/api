@@ -209,7 +209,7 @@ class Base extends Model
         //判断是否查询单条数据,如果是则判断缓存内是否有记录
         if($method ==  'getOne'){
             if(isset($parameters[0][self::$pk])){
-                $cache_key = str_replace(['table','pk'],[(new self)->table,self::$pk],self::$cache_key);
+                $cache_key = str_replace(['table','pk'],[(new self)->table,$parameters[0][self::$pk]],self::$cache_key);
                 dump((new self)->table);
             }
         }
