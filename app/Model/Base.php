@@ -92,7 +92,7 @@ class Base extends Model
      */
     public static function getField($where, $field)
     {
-        $res = self::cache('getField',self::$cache_ttl)->where($where)->first($field);
+        $res = self::where($where)->first($field);
         if (!isset($res[$field])) {
             return '';
         } else {
