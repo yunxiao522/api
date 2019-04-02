@@ -31,7 +31,7 @@ class FeedBackController extends BaseController
         //添加数据到数据库
         $res = FeedBack::add($data);
         if($res){
-            return Response::success('反馈成功');
+            return Response::success('','','反馈成功');
         }else{
             return Response::fail('反馈失败');
         }
