@@ -187,7 +187,6 @@ class CommentController extends BaseController
                 $whereIn = [
                     ['parent_id','in',$comment_ids]
                 ];
-                dump($whereIn);
                 $list = Comment::getListIn($where,$whereIn,'*',$limit);
                 break;
         }
