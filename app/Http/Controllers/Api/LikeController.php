@@ -28,7 +28,7 @@ class LikeController extends BaseController
     {
         $id = $this->request->route('id');
         $p = request('p');
-        if (!empty($p) && !is_numeric($p)) {
+        if (!empty($p) && !is_numeric($p) && $p != 'undefined') {
             return Response::fail('参数错误');
         }
         $p = empty($p) || $p == 'undefined' ? 0 : $p;
