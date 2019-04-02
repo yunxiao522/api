@@ -190,7 +190,6 @@ class CommentController extends BaseController
                 $list = Comment::getListIn($where,$whereIn,'*',$limit);
                 break;
         }
-        dump($list);die;
         //循环处理列表数据
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['create_time'] = date('Y-m-d H:i:s',$value['create_time']);
