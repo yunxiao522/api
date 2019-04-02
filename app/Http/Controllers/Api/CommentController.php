@@ -182,12 +182,12 @@ class CommentController extends BaseController
             case 3:
                 $my_comment_list = Comment::getAll($where,'id',100000);
                 $comment_ids = array_column($my_comment_list,'id','id');
-                dump($comment_ids);
                 unset($where['uid']);
                 $where[] = ['uid','<>',Auth::getUserId()];
                 $whereIn = [
                     ['parent_id','in',$comment_ids]
                 ];
+                dump($whereIn);
                 $list = Comment::getListIn($where,$whereIn,'*',$limit);
                 break;
         }
