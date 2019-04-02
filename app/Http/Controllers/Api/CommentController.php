@@ -193,7 +193,7 @@ class CommentController extends BaseController
         //循环处理列表数据
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['create_time'] = date('Y-m-d H:i:s',$value['create_time']);
-            $list['data'][$key]['article_info']['title'] = Article::getField(['id'=>$value['aid']],'title');
+            $list['data'][$key]['article_info']['title'] = [];
             $list['data'][$key]['article_info']['url'] = $this->getArticleUrl($value['aid'],0,true,true);
             $list['data'][$key]['oppose'] = $this->checkUserCommentOperateStatus($value['id'],2) ? '取消('.$value['oppose'].')' : '反对('.$value['oppose'].')';
             $list['data'][$key]['praiser'] = $this->checkUserCommentOperateStatus($value['id'],1) ? '取消('.$value['praiser'].')' : '支持('.$value['praiser'].')';
