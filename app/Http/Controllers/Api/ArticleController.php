@@ -47,7 +47,7 @@ class ArticleController extends BaseController
             $type = 'undefined';
         }
         $where = [];
-        $whereIn = [1,1];
+        $whereIn = ['is_delete',[1]];
         //组合查询条件
         if ($type != "undefined") {
             if ($type == 24) {
