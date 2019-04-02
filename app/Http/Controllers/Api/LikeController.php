@@ -101,9 +101,7 @@ class LikeController extends BaseController
         $where  = [
             'uid'=>Auth::getUserId()
         ];
-        $whereIn = [
-            ['channel',$column_son_list]
-        ];
+        $whereIn = ['channel',$column_son_list];
         $list = MyLike::getListIn($where,$whereIn,['article_id','alone','id','channel']);
         //循环列表数据
         foreach($list['data'] as $key => $value){
