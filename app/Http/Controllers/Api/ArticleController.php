@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\Admin;
 use App\Model\Article;
+use App\Model\ArticleBody;
 use App\Model\ArticleImages;
 use App\Model\Column;
 use App\Model\MyLike;
@@ -109,6 +110,10 @@ class ArticleController extends BaseController
                 $src_rule = "/(href|src)=([\"|']?)([^\"'>]+.(jpg|JPG|jpeg|JPEG|gif|GIF|png|PNG))/i";
                 preg_match($src_rule, $imgurls[$p], $match);
                 $data['img'] = $match[3];
+                break;
+            case 1:
+                $article_extend_info = ArticleBody::getOne(['article_id'=>$id],'*');
+                $data['body'] = $article_extend_info['body'];
                 break;
         }
         $data['column'] = Column::getField(['id'=>$this->article_info['column_id']],'type_name');
