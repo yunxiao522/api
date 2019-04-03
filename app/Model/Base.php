@@ -190,7 +190,7 @@ class Base extends Model
             'count' => $count,
             'data' => $res,
             'current_page' => $page,
-            'page' => ceil($count / $limit)
+            'maxpage' => ceil($count / $limit)
         ];
     }
 
