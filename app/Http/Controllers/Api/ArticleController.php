@@ -212,7 +212,7 @@ class ArticleController extends BaseController
                 'is_audit'=>1,
                 'draft'=>2
             ];
-            $list[] = Article::getOne($where,['id','title','litpic','column_id']);
+            $list[] = Article::getOne($where,['id','title','litpic','column_id','pubdate']);
         }
         return $list;
     }
