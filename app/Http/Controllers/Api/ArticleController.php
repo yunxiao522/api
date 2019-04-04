@@ -212,7 +212,9 @@ class ArticleController extends BaseController
                 'is_audit'=>1,
                 'draft'=>2
             ];
-            $list[] = Article::getOne($where,['id','title','litpic','column_id','pubdate']);
+            $random_article_info = Article::getOne($where,['id','title','litpic','column_id','pubdate']);
+            $random_article_info['pubdate'] = date('Y-m-d',$random_article_info['pubdate']);
+            $list[] = $random_article_info;
         }
         return $list;
     }
