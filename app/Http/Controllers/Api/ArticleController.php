@@ -200,8 +200,11 @@ class ArticleController extends BaseController
         ];
         $article_list_ids = Article::getALL($where,['id'],100000);
         $article_list_ids = array_column($article_list_ids,'id');
-        dump($article_list_ids);
-        $article_list = array_rand($article_list_ids,$num);
+        if(count($article_list_ids) < $num){
+            $article_list = $article_list_ids;
+        }else{
+            $article_list = array_rand($article_list_ids,$num);
+        }
         foreach ($article_list as $key=>$value){
             $id_list[] = $article_list_ids[$value];
         }
