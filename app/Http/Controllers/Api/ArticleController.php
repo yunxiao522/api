@@ -201,7 +201,7 @@ class ArticleController extends BaseController
         $article_list_ids = Article::getALL($where,['id'],100000);
         $article_list_ids = array_column($article_list_ids,'id');
         if(count($article_list_ids) < $num){
-            $article_list = $article_list_ids;
+            $article_list = array_keys($article_list_ids);
         }else{
             $article_list = array_rand($article_list_ids,$num);
         }
