@@ -71,6 +71,8 @@ Route::prefix('/v1')->group(function(){
     Route::get('/getHotSearch','Api\SearchController@getHotSearch');
     //获取搜索结果
     Route::get('/search','Api\SearchController@search');
+    //按属性获取文档列表
+    Route::get('/article/attributeList','Api\ArticleController@getAttributeArticleList');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');

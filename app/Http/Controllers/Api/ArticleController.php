@@ -277,4 +277,25 @@ class ArticleController extends BaseController
     public function checkPower(){
 
     }
+
+    /**
+     * Description 根据文档属性获取文档列表数据
+     */
+    public function getAttributeArticleList(){
+        $column_id = request('column_id');
+        $type = request('type');
+        //获取查询栏目的子栏目
+        $column_list = Column::getALL([],['id','parent_id'],1000);
+        $column_son_list = self::getSonList($column_id,$column_list);
+        $where = [
+            ['arcatt','like',"%$type%"]
+        ];
+        $whereIn = ['column_id',$column_son_list];
+        $article_list = Article::getAllIn($where,$whereIn,['id','litpic','title','pubdate','channel']);
+        //循环列表数据
+        foreach($article_list as $key => $value){
+            $article_list[$key]['pubdate'] = date('Y-m-d H:i:s',$value['pubdate']);
+        }
+        Response::success($article_list,'','get data successed');
+    }
 }
