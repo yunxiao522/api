@@ -291,7 +291,7 @@ class ArticleController extends BaseController
             ['arcatt','like',"%$type%"]
         ];
         $whereIn = ['column_id',$column_son_list];
-        $article_list = Article::getAllIn($where,$whereIn,['id','litpic','title','pubdate','channel'],5,['id','asc']);
+        $article_list = Article::getAllIn($where,$whereIn,['id','litpic','title','pubdate','channel'],5,['id','desc']);
         //循环列表数据
         foreach($article_list as $key => $value){
             $article_list[$key]['pubdate'] = date('Y-m-d H:i:s',$value['pubdate']);
