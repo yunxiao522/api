@@ -163,7 +163,7 @@ class Base extends Model
      */
     public static function getAllIn($where = [], $wherein = [], $field = '*', $limit = 100, $order = ['id', 'desc'])
     {
-        $res = self::where($where)->whereIn($wherein[0], $wherein[1])->skip(0)->take($limit)->order($order[0],$order[1])->get($field)->toArray();
+        $res = self::where($where)->whereIn($wherein[0], $wherein[1])->skip(0)->take($limit)->orderBy($order[0],$order[1])->get($field)->toArray();
         return $res;
     }
 
