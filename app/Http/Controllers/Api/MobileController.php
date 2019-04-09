@@ -22,7 +22,7 @@ class MobileController extends BaseController
         if(empty($column_id) || !is_numeric($column_id)){
             Response::fail('参数错误');
         }
-        $list = MobileTag::getALL(['column_id'=>$column_id,'status'=>1],['id','litpic','tag_id','name']);
+        $list = MobileTag::getALL(['column_id'=>$column_id,'status'=>1],['litpic','tag_id','name']);
         Response::success($list,'','get data success');
     }
 }
