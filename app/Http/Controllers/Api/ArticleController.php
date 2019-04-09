@@ -287,6 +287,7 @@ class ArticleController extends BaseController
         //获取查询栏目的子栏目
         $column_list = Column::getALL([],['id','parent_id'],1000);
         $column_son_list = self::getSonList($column_id,$column_list);
+        array_push($column_son_list,$column_id);
         $where = [
             ['arcatt','like',"%$type%"]
         ];
