@@ -290,6 +290,7 @@ class ArticleController extends BaseController
         $where = [
             ['arcatt','like',"%$type%"]
         ];
+        dump($where);
         $whereIn = ['column_id',$column_son_list];
         $article_list = Article::getAllIn($where,$whereIn,['id','litpic','title','pubdate','channel','slide_img','roll_img'],5,['id','desc']);
         //循环列表数据
