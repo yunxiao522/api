@@ -300,12 +300,18 @@ class ArticleController extends BaseController
         Response::success($article_list,'','get data successed');
     }
 
+    /**
+     * Description 根据Tag标签id获取文档列表数据
+     */
     public function getTagArticleList(){
         $tag_id = request('tag_id');
         if(empty($tag_id)){
             Response::fail('参数错误');
         }
         $article_list = TagList::getList(['tag_id'=>$tag_id],['article_id']);
-        dump($article_list);
+        foreach($article_list['data'] as $key => $value){
+            $article_list['data'][$key] = Article::getOne(['id'=>$value],['title','litpic','id','channel']);
+        }
+        Response::success($article_list,'','get data success');
     }
 }
