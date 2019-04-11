@@ -299,4 +299,9 @@ class ArticleController extends BaseController
         }
         Response::success($article_list,'','get data successed');
     }
+
+    public function getTagArticleList(){
+        $tag_id = request('tag_id');
+        $article_list = TagList::getList(['tag_id'=>$tag_id],['article_id']);
+    }
 }

@@ -75,6 +75,8 @@ Route::prefix('/v1')->group(function(){
     Route::get('/article/attributeList','Api\ArticleController@getAttributeArticleList');
     //按栏目获取移动端tag标签列表
     Route::get('/mobile/getColumnTagList','Api\MobileController@getMobileTag');
+    //按tag获取文档列表
+    Route::get('/article/tagArticleList','Api\ArticleController@getTagArticleList');
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
