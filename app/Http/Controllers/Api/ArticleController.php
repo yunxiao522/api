@@ -302,6 +302,10 @@ class ArticleController extends BaseController
 
     public function getTagArticleList(){
         $tag_id = request('tag_id');
+        if(empty($tag_id)){
+            Response::fail('参数错误');
+        }
         $article_list = TagList::getList(['tag_id'=>$tag_id],['article_id']);
+        dump($article_list);
     }
 }
