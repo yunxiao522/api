@@ -200,6 +200,10 @@ class ArticleController extends BaseController
         ];
         $article_list_ids = Article::getALL($where,['id'],100000);
         $article_list_ids = array_column($article_list_ids,'id');
+        $k = array_search($this->article_info['id'],$article_list_ids);
+        if($k){
+            unset($article_list_ids[$k]);
+        }
         if(count($article_list_ids) < $num){
             $article_list = array_keys($article_list_ids);
         }else{
