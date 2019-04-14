@@ -28,15 +28,14 @@ class SearchHistory extends Base
     public static function addHistory($keyword = '',$uid = 0){
         DB::beginTransaction();
         $search_id = Search::getField(['keyword'=>$keyword],'id');
-        dump($search_id);die;
         if(!$search_id){
-            $result = Search::add([
+            $search_id = Search::add([
                 'keyword'=>$keyword,
                 'num'=>1,
                 'create_time'=>time(),
                 'alter_time'=>time()
             ]);
-            if(!$result){
+            if(!$search_id){
                 DB::rollBack();
                 return false;
             }
