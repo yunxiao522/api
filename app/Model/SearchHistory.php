@@ -28,6 +28,7 @@ class SearchHistory extends Base
     public static function addHistory($keyword = '',$uid = 0){
         DB::beginTransaction();
         $search_id = Search::getField(['keyword'=>$keyword],'id');
+        dump($search_id);die;
         if(!$search_id){
             $result = Search::add([
                 'keyword'=>$keyword,
