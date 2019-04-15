@@ -77,6 +77,8 @@ Route::prefix('/v1')->group(function(){
     Route::get('/mobile/getColumnTagList','Api\MobileController@getMobileTag');
     //按tag获取文档列表
     Route::get('/article/tagArticleList','Api\ArticleController@getTagArticleList');
+    //获取广告代码
+    Route::get('/ad/getCode/{id}','Api\AdvertController@getAdCode')->where(['id'=>'[0-9]+']);
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');
