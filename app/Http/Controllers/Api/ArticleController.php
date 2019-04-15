@@ -85,6 +85,7 @@ class ArticleController extends BaseController
         //循环列表数据
         foreach ($list['data'] as $key => $value) {
             $list['data'][$key]['pubdate'] = date('Y-m-d', $value['pubdate']);
+            $list['data'][$key]['title'] = self::cut_str($value['title'],15);
         }
         return Response::success($list);
     }
