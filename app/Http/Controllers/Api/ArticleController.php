@@ -65,9 +65,16 @@ class ArticleController extends BaseController
                 $whereIn = [
                     'column_id', $column_arr
                 ];
-            } else {
+            } elseif($type == 1) {
+                $column_arr = Column::getALL(['parent_id'=>1],'id',100);
+                $column_arr = array_column($column_arr,'id');
+                array_push($column_arr,1);
+                $whereIn = [
+                    'column_id',$column_arr
+                ];
+            }else{
                 $where = [
-                    'column_id' => $type
+                    'column_id'=>$type
                 ];
             }
         }
