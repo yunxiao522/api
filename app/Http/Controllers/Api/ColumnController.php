@@ -41,6 +41,9 @@ class ColumnController extends BaseController
      */
     public function getColumnTagList(){
         $column =request('column');
+        if(empty($column) || !is_numeric($column)){
+            Response::fail('参数错误');
+        }
         $list = Tag::getALL(['column_id'=>$column],['id,tag_name'],1000,['id','desc']);
         Response::success($list,'','get data success');
     }
