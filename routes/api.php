@@ -77,11 +77,12 @@ Route::prefix('/v1')->group(function(){
     Route::get('/mobile/getColumnTagList','Api\MobileController@getMobileTag');
     //获取栏目的 tag标签列表
     Route::get('/column/getColumnTagList','Api\ColumnController@getColumnTagList');
+    //获取文档的 tag标签列表
+    Route::get('/article/getArticleTagList','Api\ArticleController@getArticleTagList');
     //按tag获取文档列表
     Route::get('/article/tagArticleList','Api\ArticleController@getTagArticleList');
     //获取广告代码
     Route::get('/ad/getCode/{id}','Api\AdvertController@getAdCode')->where(['id'=>'[0-9]+']);
-
 });
 //获取验证令牌
 Route::any('/getToken','Api\Auth@getToken');

@@ -327,4 +327,20 @@ class ArticleController extends BaseController
         }
         Response::success($article_list,'','get data success');
     }
+
+    /**
+     * Description 获取文档的tag列表
+     */
+    public function getArticleTagList(){
+        $id = request('id');
+        if(empty($id) || !is_numeric($id)){
+            Response::fail('参数错误');
+        }
+        $tag_ids = TagList::getALL(['article_id'=>$id],['tag_id'],100);
+        $tag_list = [];
+        foreach($tag_ids as $value){
+            $tag_list[] = Tag::getOne(['id'=>$value['tag_id']],['tag_name as name','id as tag_id']);
+        }
+        Response::success($tag_list,'','get data success');
+    }
 }
