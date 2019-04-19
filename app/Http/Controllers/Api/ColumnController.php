@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Model\Column;
+use App\Model\Tag;
 use Illuminate\Http\Request;
 
 class ColumnController extends BaseController
@@ -32,6 +33,15 @@ class ColumnController extends BaseController
             'parent_id'=>$id
         ];
         $list = Column::getAll($where,['id','type_name','cover_img']);
-        return Response::success($list,'获取数据成功');
+        return Response::success($list,'','get data success');
+    }
+
+    /**
+     * Description 获取栏目 的tag标签列表
+     */
+    public function getColumnTagList(){
+        $column =request('column');
+        $list = Tag::getALL(['column_id'=>$column],['id,tag_name'],1000,['id','desc']);
+        Response::success($list,'','get data success');
     }
 }
