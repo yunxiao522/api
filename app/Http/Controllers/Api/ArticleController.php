@@ -154,6 +154,7 @@ class ArticleController extends BaseController
         $data['pubdate'] = date('Y-m-d H:i:s', $this->article_info['pubdate']);
         $data['comment_num'] = $this->article_info['comment_num'];
         $data['id'] = $this->article_info['id'];
+        $data['column_id'] = $this->article_info['column_id'];
         //获取作者信息
         if ($this->article_info['user_type'] == 1) {
             $data['user_info'] = User::getOne(['id' => $this->article_info['userid']], ['nickname','face']);
