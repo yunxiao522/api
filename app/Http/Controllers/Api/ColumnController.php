@@ -40,7 +40,7 @@ class ColumnController extends BaseController
      * Description 获取栏目 的tag标签列表
      */
     public function getColumnTagList(){
-        $column =request('column');
+        $column =request('column_id');
         if(empty($column) || !is_numeric($column)){
             Response::fail('参数错误');
         }
