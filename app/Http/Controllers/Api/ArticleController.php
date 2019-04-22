@@ -108,7 +108,7 @@ class ArticleController extends BaseController
         switch ($this->article_info['channel']){
             case 2:
                 $article_extend_info = ArticleImages::getOne(['article_id'=>$id],'*');
-                $data['prev_p'] = $p == 0?0:$p-1;
+                $data['prev_p'] = $p < 0?0:$p-1;
                 $data['next_p'] = $p > $article_extend_info['imgnum'] ? $article_extend_info['imgnum']:$p+1;
                 //验证分页数据,防止出错
                 if($article_extend_info['imgnum'] < ($p+1)){
