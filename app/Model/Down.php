@@ -12,7 +12,7 @@ class Down extends Base
         parent::__construct($attributes);
     }
 
-    public static function add($aid,$token,$source_file,$page){
+    public static function addDownUrl($aid,$token,$source_file,$page){
         //查询是否已经下载过该文件
         $where = ['article_id'=>$aid,'page'=>$page];
         $down_info = self::getOne($where,['id','num']);
@@ -20,7 +20,7 @@ class Down extends Base
         if(!empty($down_info)){
             return self::edit(['id'=>$down_info['id']],['num'=>$down_info['num']+1,'end_time'=>time()]);
         }else{
-            return parent::add([
+            return self::add([
                 'article_id'=>$aid,
                 'num'=>0,
                 'token'=>$token,

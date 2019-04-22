@@ -63,7 +63,7 @@ class DownController extends BaseController
         }
         DB::beginTransaction();
         //添加下载表信息
-        $res = Down::add($id,$article_info['token'],$url,$p);
+        $res = Down::addDownUrl($id,$article_info['token'],$url,$p);
         if(!$res){
             Response::fail('获取下载地址失败');
         }
@@ -72,7 +72,7 @@ class DownController extends BaseController
         if($uid){
             $file_size = File::getRemoteFileSize($url);
             $file_ext = File::getRemoteFileExt($url);
-            $res = MyDown::add($id,$file_ext,$file_size,$url,$article_info['column_id']);
+            $res = MyDown::addMyDown($id,$file_ext,$file_size,$url,$article_info['column_id']);
             if(!$res){
                 DB::rollBack();
                 Response::fail('获取下载地址失败');
