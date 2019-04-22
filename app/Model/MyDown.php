@@ -24,7 +24,8 @@ class MyDown extends Base
                 'file_size'=>$file_size,
                 'file_url'=>$file_url,
                 'create_time'=>time(),
-                'column_id'=>$column_id
+                'column_id'=>$column_id,
+                'uid'=>$uid
             ]);
         }
         return true;
