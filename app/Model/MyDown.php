@@ -12,4 +12,21 @@ class MyDown extends Base
     {
         parent::__construct($attributes);
     }
+
+    public static function add($article_id,$file_type,$file_size,$file_url,$column_id){
+        //判断是否之前有下载过
+        $where = ['file_url'=>$file_url];
+        $count = self::getCount($where,'uid');
+        if(empty($count)){
+            return parent::add([
+                'article_id'=>$article_id,
+                'file_type'=>$file_type,
+                'file_size'=>$file_size,
+                'file_url'=>$file_url,
+                'create_time'=>time(),
+                'column_id'=>$column_id
+            ]);
+        }
+        return true;
+    }
 }

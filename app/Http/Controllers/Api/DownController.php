@@ -4,10 +4,13 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Libs\sucaiz\File;
 use App\Model\Article;
 use App\Model\Column;
+use App\Model\Down;
 use App\Model\MyDown;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DownController extends BaseController
 {
@@ -31,5 +34,51 @@ class DownController extends BaseController
             $list['data'][$key]['article'] = self::cut_str(Article::getField(['id'=>$value['article_id']],'title'),10);
         }
         Response::success($list,'','获取数据成功');
+    }
+
+    /**
+     * Description 获取文件下载链接
+     */
+    public function getDownUrl(){
+        $id = request('id');
+        if(empty($id) || !is_numeric($id)){
+            Response::fail('参数错误');
+        }
+        $p = request('p');
+        if(!empty($p) && !is_numeric($p)){
+            Response::fail('参数错误');
+        }
+        $url = request('url');
+        if(empty($url)){
+            Response::fail('参数错误');
+        }
+        //检查远程文件是否存在
+        if(!File::checkRemoteUrl($url)){
+            Response::fail('文件不存在');
+        }
+        //查询文档信息
+        $article_info = Article::getField(['id'=>$id],['token','column_id']);
+        if(empty($article_info)){
+            Response::fail('文档不存在');
+        }
+        DB::beginTransaction();
+        //添加下载表信息
+        $res = Down::add($id,$article_info['token'],$url,$p);
+        if(!$res){
+            Response::fail('获取下载地址失败');
+        }
+        //添加我的下载信息
+        $uid = Auth::getUserId();
+        if($uid){
+            $file_size = File::getRemoteFileSize($url);
+            $file_ext = File::getRemoteFileExt($url);
+            $res = MyDown::add($id,$file_ext,$file_size,$url,$article_info['column_id']);
+            if(!$res){
+                DB::rollBack();
+                Response::fail('获取下载地址失败');
+            }
+        }
+        DB::commit();
+        Response::success(['url'=>$url],'','get url success');
     }
 }
