@@ -53,8 +53,7 @@ class CommentController extends BaseController
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*'],$this->reply_limit);
         }
-        dump($list);
-
+        Response::success($list,'','get data success');
     }
 
     /**
