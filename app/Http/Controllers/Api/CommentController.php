@@ -62,7 +62,7 @@ class CommentController extends BaseController
         $list = Comment::getList(['aid'=>$id,'parent_id'=>0,['inform','<',$this->inform_num]],['*'],$this->limit,$type);
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*'],$this->reply_limit);
-            $list['data'][$key]['user_level'] = User::getField(['id'=>$value['uid']],['level']);
+            $list['data'][$key]['user_level'] = User::getField(['id'=>$value['uid']],'level');
         }
         Response::success($list,'','get data success');
     }
