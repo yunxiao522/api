@@ -44,7 +44,7 @@ class ArticleController extends BaseController
             Response::fail('文档不存在','',20001);
         }
         if($article_info['iscommend'] == 2){
-            Response::fail('文档设置为不能评论','',20005);
+            Response::success('','','文档设置为不能评论',20005);
         }
         return Response::success(['title'=>$article_info['title']]);
     }
