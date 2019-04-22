@@ -52,6 +52,7 @@ class DownController extends BaseController
         if(empty($url)){
             Response::fail('参数错误');
         }
+        $url = urldecode($url);
         //检查远程文件是否存在
         if(!File::checkRemoteUrl($url)){
             Response::fail('文件不存在');
