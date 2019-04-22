@@ -49,7 +49,7 @@ class CommentController extends BaseController
         }
         $list = Comment::getList(['aid'=>$id,'parent_id'=>0],['*']);
         foreach($list['data'] as $key => $value){
-            $list['data'][$key]['reply'] = Comment::getAllIn(['ppid'=>$value['id']],['*']);
+            $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*']);
         }
         dump($list);
 
