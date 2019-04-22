@@ -20,7 +20,9 @@ class Down extends Base
         if(!empty($down_info)){
             return self::edit(['id'=>$down_info['id']],['num'=>$down_info['num']+1,'end_time'=>time()]);
         }else{
-            return parent::add([
+            $parent = new parent();
+            $parent->table = (new self())->table;
+            return $parent->add([
                 'article_id'=>$aid,
                 'num'=>0,
                 'token'=>$token,
