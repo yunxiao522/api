@@ -30,6 +30,9 @@ class CommentController extends BaseController
      */
     public function getList(){
         $id = request('id');
+        if(empty($id) || !is_numeric($id)){
+            Response::fail('参数错误');
+        }
         dump($id);
 
     }
