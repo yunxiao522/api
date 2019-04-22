@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 class CommentController extends BaseController
 {
-    private $limit = 20;
+    private $limit = 10;
     //获取评论列表时,二级评论显示的层数
     protected $reply_limit = 3;
     //评论列表的排序规则
