@@ -22,6 +22,8 @@ class CommentController extends BaseController
     private $limit = 20;
     //获取评论列表时,二级评论显示的层数
     protected $reply_limit = 3;
+    //评论列表的排序规则
+    protected $order_type = [1=>['id','desc'],2=>['id','asc']];
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -34,6 +36,10 @@ class CommentController extends BaseController
         $id = request('id');
         if(empty($id) || !is_numeric($id)){
             Response::fail('参数错误');
+        }
+        $type = request('type');
+        if(empty($type) || !isset($this->order_type[$type])){
+            $type = $this->order_type[1];
         }
         $where = [
             'id'=>$id,
@@ -49,7 +55,7 @@ class CommentController extends BaseController
         if($article_info['icsommend'] == 2){
             Response::success([],'','文档被设置为禁止评论',20005);
         }
-        $list = Comment::getList(['aid'=>$id,'parent_id'=>0],['*']);
+        $list = Comment::getList(['aid'=>$id,'parent_id'=>0],['*'],$this->limit,$type);
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*'],$this->reply_limit);
         }
