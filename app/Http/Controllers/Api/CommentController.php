@@ -33,8 +33,20 @@ class CommentController extends BaseController
         if(empty($id) || !is_numeric($id)){
             Response::fail('参数错误');
         }
+        $where = [
+            'id'=>$id,
+            'is_delete'=>1,
+            'is_audit'=>1,
+            'draft'=>2
+        ];
         //查询文档评论状态
-        $article_info = Article::getOne(['id'=>$id],['id','iscomment']);
+        $article_info = Article::getOne($where,['id','iscommend']);
+        if(empty($article_info)){
+            Response::fail('文档不存在','',20001);
+        }
+        if($article_info['icsommend'] == 2){
+            Response::success([],'','文档被设置为禁止评论',20005);
+        }
         dump($article_info);
 
     }
