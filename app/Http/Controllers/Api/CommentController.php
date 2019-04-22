@@ -33,7 +33,9 @@ class CommentController extends BaseController
         if(empty($id) || !is_numeric($id)){
             Response::fail('参数错误');
         }
-        dump($id);
+        //查询文档评论状态
+        $article_info = Article::getOne(['id'=>$id],['id','iscomment']);
+        dump($article_info);
 
     }
 
