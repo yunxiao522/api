@@ -129,6 +129,7 @@ class ArticleController extends BaseController
         $data['tag'] = $this->getArticleTagInfo();
         $data['hot_tag'] = $this->getArticleHotTag();
         $data['like_status'] = $this->getArticleLikeStatus($id,$p);
+        $data['page'] = $p;
         return Response::success($data,'get data success');
     }
 
