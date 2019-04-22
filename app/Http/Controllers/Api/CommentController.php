@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\DB;
 class CommentController extends BaseController
 {
     private $limit = 20;
+    //获取评论列表时,二级评论显示的层数
+    protected $reply_limit = 3;
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -49,7 +51,7 @@ class CommentController extends BaseController
         }
         $list = Comment::getList(['aid'=>$id,'parent_id'=>0],['*']);
         foreach($list['data'] as $key => $value){
-            $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*']);
+            $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*'],$this->reply_limit);
         }
         dump($list);
 
