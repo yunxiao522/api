@@ -59,7 +59,7 @@ class CommentController extends BaseController
         if($article_info['icsommend'] == 2){
             Response::success([],'','文档被设置为禁止评论',20005);
         }
-        $list = Comment::getList(['aid'=>$id,'parent_id'=>0,['inform','<',$this->inform_num]],['*'],$this->limit,$type);
+        $list = Comment::getList(['aid'=>$id,'parent_id'=>0,['inform','<',$this->inform_num]],['uid','face','content','create_time','id'],$this->limit,$type);
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*'],$this->reply_limit);
             $list['data'][$key]['user_level'] = User::getField(['id'=>$value['uid']],'level');
