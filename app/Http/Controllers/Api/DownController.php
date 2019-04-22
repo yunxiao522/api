@@ -73,7 +73,6 @@ class DownController extends BaseController
             $file_size = File::getRemoteFileSize($url);
             $file_ext = File::getRemoteFileExt($url);
             $res = MyDown::addMyDown($uid,$id,$file_ext,$file_size,$url,$article_info['column_id']);
-            dump($res);
             if(!$res){
                 DB::rollBack();
                 Response::fail('获取下载地址失败');
