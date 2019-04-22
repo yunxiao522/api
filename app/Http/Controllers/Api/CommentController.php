@@ -63,6 +63,7 @@ class CommentController extends BaseController
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*'],$this->reply_limit);
             $list['data'][$key]['user_level'] = User::getField(['id'=>$value['uid']],'level');
+            $list['data'][$key]['create_time'] = date('Y-m-d H:i:s',$value['create_time']);
         }
         Response::success($list,'','get data success');
     }
