@@ -18,7 +18,7 @@ class MyDown extends Base
         $where = ['file_url'=>$file_url];
         $count = self::getCount($where,'uid');
         if(empty($count)){
-            return self::add([
+            return self::insert([
                 'article_id'=>$article_id,
                 'file_type'=>$file_type,
                 'file_size'=>$file_size,
