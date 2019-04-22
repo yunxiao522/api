@@ -57,7 +57,7 @@ class DownController extends BaseController
             Response::fail('文件不存在');
         }
         //查询文档信息
-        $article_info = Article::getField(['id'=>$id],['token','column_id']);
+        $article_info = Article::getOne(['id'=>$id],['token','column_id']);
         if(empty($article_info)){
             Response::fail('文档不存在');
         }
