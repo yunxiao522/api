@@ -33,8 +33,20 @@ class ArticleController extends BaseController
      */
     public function getTitle(){
         $id = $this->request->route('id');
-        $title = Article::getField(['id'=>$id],'title');
-        return Response::success(['title'=>$title]);
+        $where = [
+            'id'=>$id,
+            'is_delete'=>1,
+            'is_audit'=>1,
+            'draft'=>2
+        ];
+        $article_info = Article::getOne($where,['title','iscommend']);
+        if(empty($article_info)){
+            Response::fail('文档不存在');
+        }
+        if($article_info['iscommend'] == 2){
+            Response::fail('文档设置为不能评论');
+        }
+        return Response::success(['title'=>$article_info['title']]);
     }
 
     /**
