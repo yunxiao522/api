@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Libs\sucaiz\Config;
 use App\Model\Article;
 use App\Model\Comment;
 use App\Model\CommentOperate;
@@ -24,9 +25,12 @@ class CommentController extends BaseController
     protected $reply_limit = 3;
     //评论列表的排序规则
     protected $order_type = [1=>['id','desc'],2=>['id','asc']];
+    //评论举报极值
+    protected $inform_num;
     public function __construct(Request $request)
     {
         parent::__construct($request);
+        $this->inform_num = Config::get('cfg_comment_inform_num');
     }
 
     /**
@@ -55,10 +59,44 @@ class CommentController extends BaseController
         if($article_info['icsommend'] == 2){
             Response::success([],'','文档被设置为禁止评论',20005);
         }
-        $list = Comment::getList(['aid'=>$id,'parent_id'=>0],['*'],$this->limit,$type);
+        $list = Comment::getList(['aid'=>$id,'parent_id'=>0,['inform','<',$this->inform_num]],['*'],$this->limit,$type);
         foreach($list['data'] as $key => $value){
             $list['data'][$key]['reply'] = Comment::getAll(['ppid'=>$value['id']],['*'],$this->reply_limit);
         }
+        Response::success($list,'','get data success');
+    }
+
+    /**
+     * Description 获取回复评论列表
+     */
+    public function getReplyList(){
+        $id = request('id');
+        if(empty($id) || !is_numeric($id)){
+            Response::fail('参数错误');
+        }
+        $type = request('type');
+        if(empty($type) || !isset($this->order_type[$type])){
+            $type = $this->order_type[1];
+        }
+        $aid = request('aid');
+        if(empty($aid) || !is_numeric($aid)){
+            Response::fail('参数错误');
+        }
+        $where = [
+            'id'=>$aid,
+            'is_delete'=>1,
+            'is_audit'=>1,
+            'draft'=>2
+        ];
+        //查询文档评论状态
+        $article_info = Article::getOne($where,['id','iscommend']);
+        if(empty($article_info)){
+            Response::fail('文档不存在','',20001);
+        }
+        if($article_info['icsommend'] == 2){
+            Response::success([],'','文档被设置为禁止评论',20005);
+        }
+        $list = Comment::getList(['aid'=>$aid,'ppid'=>$id,['inform','<',$this->inform_num]],['*'],$this->limit,$type);
         Response::success($list,'','get data success');
     }
 
