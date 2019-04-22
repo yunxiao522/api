@@ -52,7 +52,7 @@ Route::prefix('/v1')->group(function(){
     //获取文档标题
     Route::get('/article/getTitle/{id}','Api\ArticleController@getTitle');
     //获取文档评论列表
-    Route::get('/comment/getList/{id}/{page?}/{limit?}','Api\CommentController@getList');
+    Route::get('/comment/getList','Api\CommentController@getList');
     //获取文档列表
     Route::get('/article/getList/{type?}','Api\ArticleController@getList');
     //获取下级栏目列表

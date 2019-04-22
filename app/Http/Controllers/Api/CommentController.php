@@ -29,13 +29,9 @@ class CommentController extends BaseController
      * Description 获取评论列表数据
      */
     public function getList(){
-        $id = $this->request->route('id');
-        $limit = $this->request->route('limit') && $this->request->route('limit') <= $this->limit?$this->request->route('limit'):$this->limit;
-        $list = Comment::getList([
-            'status'=>1,
-            'aid'=>$id
-        ],'*',$limit,['create_time','desc']);
-        dump($list);
+        $id = request('id');
+        dump($id);
+
     }
 
     /**
