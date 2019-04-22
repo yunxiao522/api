@@ -13,7 +13,7 @@ class MyDown extends Base
         parent::__construct($attributes);
     }
 
-    public static function addMyDown($article_id,$file_type,$file_size,$file_url,$column_id){
+    public static function addMyDown($uid,$article_id,$file_type,$file_size,$file_url,$column_id){
         //判断是否之前有下载过
         $where = ['file_url'=>$file_url];
         $count = self::getCount($where,'uid');
