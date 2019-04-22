@@ -48,6 +48,9 @@ class CommentController extends BaseController
             Response::success([],'','文档被设置为禁止评论',20005);
         }
         $list = Comment::getList(['aid'=>$id,'parent_id'=>0],['*']);
+        foreach($list['data'] as $key => $value){
+            $list['data'][$key]['reply'] = Comment::getAllIn(['ppid'=>$value['id']],['*']);
+        }
         dump($list);
 
     }
