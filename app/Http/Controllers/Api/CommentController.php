@@ -47,7 +47,7 @@ class CommentController extends BaseController
         if($article_info['icsommend'] == 2){
             Response::success([],'','文档被设置为禁止评论',20005);
         }
-        $list = Comment::getAll(['aid'=>$id],['*']);
+        $list = Comment::getList(['aid'=>$id],['*']);
         dump($list);
 
     }
