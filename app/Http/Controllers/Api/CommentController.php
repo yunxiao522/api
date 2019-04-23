@@ -68,12 +68,18 @@ class CommentController extends BaseController
             if (!empty($list['data'][$key]['reply'])) {
                 $list['data'][$key]['reply_count'] = Comment::getCount(['ppid' => $value['id']], 'id');
                 foreach ($list['data'][$key]['reply'] as $k => $v){
-                    $list['data'][$key]['reply'][$k]['operation_status'] = $this->getUserCommentStatus($v['id']);
+                    $list['data'][$key]['reply'][$k]['operation_status'] = [
+                        'oppose'=>$this->checkUserCommentOperateStatus($v['id'],2),
+                        'praiser'=>$this->checkUserCommentOperateStatus($v['id'],1)
+                    ];
                 }
             }
             $list['data'][$key]['user_info'] = User::getOne(['id' => $value['uid']], ['level', 'nickname']);
             $list['data'][$key]['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
-            $list['data'][$key]['operate_status'] = $this->getUserCommentStatus($value['id']);
+            $list['data'][$key]['operate_status'] = [
+                'oppose'=>$this->checkUserCommentOperateStatus($value['id'],2),
+                'praiser'=>$this->checkUserCommentOperateStatus($value['id'],1)
+            ];
         }
         Response::success($list, '', 'get data success');
     }
@@ -309,25 +315,5 @@ class CommentController extends BaseController
         } else {
             return false;
         }
-    }
-
-    /**
-     * @param $comment_id 评论id
-     * @return array 评论的操作状态
-     * Description 获取评论的账户操作状态
-     */
-    protected function getUserCommentStatus($comment_id)
-    {
-        $uid = Auth::getUserId();
-        if (!$uid) {
-            return [
-                'oppose' => false,
-                'praiser' => false
-            ];
-        }
-        return [
-            'oppose' => CommentOperate::getCount(['uid' => $uid, 'comment_id' => $comment_id, 'type' => 2]) == 0 ? false : true,
-            'praiser' => CommentOperate::getCount(['uid' => $uid, 'comment_id' => $comment_id, 'type' => 1]) == 0 ? false : true
-        ];
     }
 }
