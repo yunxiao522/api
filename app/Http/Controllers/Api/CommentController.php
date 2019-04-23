@@ -137,7 +137,7 @@ class CommentController extends BaseController
         if(is_string($res)){
             Response::fail($res);
         }
-        Response::success($res,'','operate successfully');
+        Response::success($res,'','投票成功');
     }
 
     /**
@@ -158,7 +158,7 @@ class CommentController extends BaseController
         if(is_string($res)){
             Response::fail($res);
         }
-        Response::success($res,'','operate successfully');
+        Response::success($res,'','投票成功');
     }
 
     /**
