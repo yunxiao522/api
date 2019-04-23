@@ -67,6 +67,9 @@ class CommentController extends BaseController
             $list['data'][$key]['reply_count'] = 0;
             if (!empty($list['data'][$key]['reply'])) {
                 $list['data'][$key]['reply_count'] = Comment::getCount(['ppid' => $value['id']], 'id');
+                foreach ($value['reply'] as $k => $v){
+                    $list['data'][$key]['reply'][$k]['operation_status'] = $this->getUserCommentStatus($v['id']);
+                }
             }
             $list['data'][$key]['user_info'] = User::getOne(['id' => $value['uid']], ['level', 'nickname']);
             $list['data'][$key]['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
