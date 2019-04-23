@@ -128,7 +128,7 @@ class CommentController extends BaseController
         ];
         $list_info['oppose'] = $oppose_status ? '取消反对('.$list_info['oppose'].')' : '反对('.$list_info['oppose'].')';
         $list_info['praiser'] = $praiser_status ? '取消支持('.$list_info['praiser'].')' : '支持('.$list_info['praiser'].')';
-        $list_info['face'] = strpos($list_info['face'],'http') === false ? config::get('cfg_hostsite').$list_info : $list_info['face'];
+        $list_info['face'] = strpos($list_info['face'],'http') === false ? config::get('cfg_hostsite').$list_info['face'] : $list_info['face'];
         return $list_info;
     }
 
