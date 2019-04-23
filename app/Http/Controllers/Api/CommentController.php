@@ -63,7 +63,7 @@ class CommentController extends BaseController
         }
         $list = Comment::getList(['aid' => $id, 'parent_id' => 0, ['inform', '<', $this->inform_num]], ['uid', 'face', 'content', 'create_time', 'id', 'tier', 'city', 'praiser', 'oppose'], $this->limit, $type);
         foreach ($list['data'] as $key => $value) {
-            $list['data'][$key]['reply'] = Comment::getAll(['ppid' => $value['id']], ['*'], $this->reply_limit);
+            $list['data'][$key]['reply'] = Comment::getAll(['ppid' => $value['id']], ['uid', 'face', 'content', 'create_time', 'id', 'tier', 'city', 'praiser', 'oppose'], $this->reply_limit);
             $list['data'][$key]['reply_count'] = 0;
             if (!empty($list['data'][$key]['reply'])) {
                 $list['data'][$key]['reply_count'] = Comment::getCount(['ppid' => $value['id']], 'id');
@@ -72,6 +72,7 @@ class CommentController extends BaseController
                         'oppose'=>$this->checkUserCommentOperateStatus($v['id'],2),
                         'praiser'=>$this->checkUserCommentOperateStatus($v['id'],1)
                     ];
+                    $list['data'][$key]['reply'][$k]['user_info'] = User::getOne(['id' => $v['uid']], ['level', 'nickname']);
                 }
             }
             $list['data'][$key]['user_info'] = User::getOne(['id' => $value['uid']], ['level', 'nickname']);
