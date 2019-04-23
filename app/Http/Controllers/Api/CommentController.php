@@ -45,7 +45,7 @@ class CommentController extends BaseController
         }
         $type = request('type');
         if (empty($type) || !isset($this->order_type[$type])) {
-            $type = $this->order_type[1];
+            $type = 1;
         }
         $where = [
             'id' => $id,
@@ -61,7 +61,7 @@ class CommentController extends BaseController
         if ($article_info['icsommend'] == 2) {
             Response::success([], '', '文档被设置为禁止评论', 20005);
         }
-        $list = Comment::getList(['aid' => $id, 'parent_id' => 0, ['inform', '<', $this->inform_num]], ['uid', 'face', 'content', 'create_time', 'id', 'tier', 'city', 'praiser', 'oppose'], $this->limit, $type);
+        $list = Comment::getList(['aid' => $id, 'parent_id' => 0, ['inform', '<', $this->inform_num]], ['uid', 'face', 'content', 'create_time', 'id', 'tier', 'city', 'praiser', 'oppose'], $this->limit, $this->order_type[$type]);
         foreach ($list['data'] as $key => $value) {
             $list['data'][$key] = $this->dealCommentListInfo($value);
             //获取二级评论
