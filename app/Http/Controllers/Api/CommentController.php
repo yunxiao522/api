@@ -321,12 +321,12 @@ class CommentController extends BaseController
         $uid = Auth::getUserId();
         if (!$uid) {
             return [
-                'oppose_status' => false,
+                'oppose' => false,
                 'praiser' => false
             ];
         }
         return [
-            'oppose_status' => CommentOperate::getCount(['uid' => $uid, 'comment_id' => $comment_id, 'type' => 2]) == 0 ? false : true,
+            'oppose' => CommentOperate::getCount(['uid' => $uid, 'comment_id' => $comment_id, 'type' => 2]) == 0 ? false : true,
             'praiser' => CommentOperate::getCount(['uid' => $uid, 'comment_id' => $comment_id, 'type' => 1]) == 0 ? false : true
         ];
     }
