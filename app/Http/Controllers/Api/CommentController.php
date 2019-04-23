@@ -68,19 +68,10 @@ class CommentController extends BaseController
             if (!empty($list['data'][$key]['reply'])) {
                 $list['data'][$key]['reply_count'] = Comment::getCount(['ppid' => $value['id']], 'id');
                 foreach ($list['data'][$key]['reply'] as $k => $v){
-                    $list['data'][$key]['reply'][$k]['operation_status'] = [
-                        'oppose'=>$this->checkUserCommentOperateStatus($v['id'],2),
-                        'praiser'=>$this->checkUserCommentOperateStatus($v['id'],1)
-                    ];
-                    $list['data'][$key]['reply'][$k]['user_info'] = User::getOne(['id' => $v['uid']], ['level', 'nickname']);
+                    $list['data'][$key]['reply'][$k]= $this->dealCommentListInfo($v);
                 }
             }
-            $list['data'][$key]['user_info'] = User::getOne(['id' => $value['uid']], ['level', 'nickname']);
-            $list['data'][$key]['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
-            $list['data'][$key]['operate_status'] = [
-                'oppose'=>$this->checkUserCommentOperateStatus($value['id'],2),
-                'praiser'=>$this->checkUserCommentOperateStatus($value['id'],1)
-            ];
+            $list['data'][$key] = $this->dealCommentListInfo($value);
         }
         Response::success($list, '', 'get data success');
     }
@@ -118,6 +109,25 @@ class CommentController extends BaseController
         }
         $list = Comment::getList(['aid' => $aid, 'ppid' => $id, ['inform', '<', $this->inform_num]], ['*'], $this->limit, $type);
         Response::success($list, '', 'get data success');
+    }
+
+    /**
+     * @param $list_info
+     * @return mixed
+     * Description 处理评论列表数据信息
+     */
+    private function dealCommentListInfo($list_info){
+        $list_info['user_info'] = User::getOne(['id' => $list_info['uid']], ['level', 'nickname']);
+        $list_info['create_time'] = date('Y-m-d H:i:s', $list_info['create_time']);
+        $oppose_status = $this->checkUserCommentOperateStatus($list_info['id'],2);
+        $praiser_status = $this->checkUserCommentOperateStatus($list_info['id'],1);
+        $list_info['operate_status'] = [
+            'oppose'=>$oppose_status,
+            'praiser'=>$praiser_status
+        ];
+        $list_info['oppose'] = $oppose_status ? '取消反对('.$list_info['oppose'].')' : '反对('.$list_info['oppose'].')';
+        $list_info['praiser'] = $praiser_status ? '取消支持('.$list_info['praiser'].')' : '支持('.$list_info['praiser'].')';
+        return $list_info;
     }
 
     /**
@@ -318,7 +328,7 @@ class CommentController extends BaseController
             'type' => $type,
             'uid' => Auth::getUserId()
         ];
-        //查询条件
+        //查询符合条件的操作
         $count = CommentOperate::getCount($where, 'uid');
         if (!empty($count)) {
             return true;
