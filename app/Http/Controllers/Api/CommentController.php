@@ -133,7 +133,11 @@ class CommentController extends BaseController
         if ($validator->fails()) {
             Response::fail($validator->errors()->first());
         }
-        $this->operate(request('id'), 1);
+        $res = $this->operate(request('id'), 1);
+        if(is_string($res)){
+            Response::fail($res);
+        }
+        Response::success($res,'','operate successfully');
     }
 
     /**
@@ -150,12 +154,17 @@ class CommentController extends BaseController
         if ($validator->fails()) {
             Response::fail($validator->errors()->first());
         }
-        $this->operate(request('id'), 2);
+        $res = $this->operate(request('id'), 2);
+        if(is_string($res)){
+            Response::fail($res);
+        }
+        Response::success($res,'','operate successfully');
     }
 
     /**
-     * @param $comment_id
-     * @param $type
+     * @param $comment_id 评论id
+     * @param $type 操作类型
+     * @return array|string 操作结果
      * Description 评论操作方法
      */
     private function operate($comment_id, $type)
@@ -178,7 +187,7 @@ class CommentController extends BaseController
         ];
         $count = CommentOperate::getField($where, 'uid');
         if (!empty($count)) {
-            Response::fail('你已经投过票了');
+            return'你已经投过票了';
         }
         //判断是否有过相同类型操作
         $where = [
@@ -193,13 +202,13 @@ class CommentController extends BaseController
             $res = CommentOperate::del($where);
             if (!$res) {
                 DB::rollBack();
-                Response::fail('投票失败');
+                return '投票失败';
             }
             //减少对应评论状态的值
             $res = Comment::decr(['id' => $comment_id], $field, 1);
             if (!$res) {
                 DB::rollBack();
-                Response::fail('投票失败');
+                return '投票失败';
             }
             $class = 2;
         } else {
@@ -211,19 +220,19 @@ class CommentController extends BaseController
             ]);
             if (!$res) {
                 DB::rollBack();
-                Response::fail('投票失败');
+                return '投票失败';
             }
             //更新评论表字段值
             $res = Comment::incr(['id' => $comment_id], $field, 1);
             if (!$res) {
                 DB::rollBack();
-                Response::fail('投票失败');
+                return '投票失败';
             }
             $class = 1;
         }
         $num = Comment::getField(['id' => $comment_id], $field);
         DB::commit();
-        Response::success(['num' => $num, 'type' => $class], '', '投票成功');
+        return ['num' => $num, 'type' => $class];
     }
 
     /**
