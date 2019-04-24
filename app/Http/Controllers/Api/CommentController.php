@@ -121,7 +121,7 @@ class CommentController extends BaseController
         $list = Comment::getList(['aid' => $aid, 'ppid' => $id, ['inform', '<', $this->inform_num]], ['*'], $this->limit, $type);
         //处理列表数据
         foreach ($list['data'] as $key => $value){
-            $list['data'][$key] = $this->dealCommentDeviceInfo($value);
+            $list['data'][$key] = $this->dealCommentListInfo($value);
         }
         Response::success($list, '', 'get data success');
     }
