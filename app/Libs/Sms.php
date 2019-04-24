@@ -10,6 +10,7 @@ namespace App\Libs;
 use App\Libs\Aliyun\Sms\SignatureHelper;
 use App\Http\Controllers\Api\Response;
 use App\Model\UserSms;
+use App\Libs\sucaiz\Config;
 
 class Sms
 {
@@ -23,8 +24,8 @@ class Sms
         $params = array ();
         // *** 需用户填写部分 ***
         // fixme 必填: 请参阅 https://ak-console.aliyun.com/ 取得您的AK信息
-        $accessKeyId = config('ALIYUN_API');
-        $accessKeySecret = config('ALIYUN_KEY');
+        $accessKeyId = Config::get('cfg_aliyun_app_id');
+        $accessKeySecret = Config::get('cfg_aliyun_app_key');
         // fixme 必填: 短信接收号码
         $params["PhoneNumbers"] = $phone;
         // fixme 必填: 短信签名，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
