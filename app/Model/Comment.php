@@ -20,6 +20,11 @@ class Comment extends Base
 
     //获取楼层数
     public static function getTier($where){
-        return self::where($where)->orderBy('tier','desc')->first('tier');
+        $res = self::where($where)->orderBy('tier','desc')->first('tier');
+        if (!isset($res['tier'])) {
+            return '';
+        } else {
+            return $res['tier'];
+        }
     }
 }
