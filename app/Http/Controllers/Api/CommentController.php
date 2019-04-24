@@ -325,7 +325,7 @@ class CommentController extends BaseController
         $res = Comment::edit(['id'=>$comment_id],[
             'city' => Ip::getIpCity($this->request->ip()),
         ]);
-        if(!$res){
+        if($res === false){
             DB::rollBack();
             Response::fail('发表失败');
         }
