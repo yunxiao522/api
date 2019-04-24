@@ -323,4 +323,13 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * Description 获取账号昵称
+     */
+    public function getNickName(){
+        $id = Auth::getUserId();
+        $nickname = User::getField(['id'=>$id],'nickname');
+        Response::success(['nickname'=>$nickname],'','get nickname successful');
+    }
+
 }
