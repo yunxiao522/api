@@ -123,6 +123,7 @@ class CommentController extends BaseController
         foreach ($list['data'] as $key => $value){
             $list['data'][$key] = $this->dealCommentListInfo($value);
         }
+        $list['comment_info'] = $this->dealCommentListInfo($comment_info);
         Response::success($list, '', 'get data success');
     }
 
