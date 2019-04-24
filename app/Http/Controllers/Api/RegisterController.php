@@ -32,6 +32,7 @@ class RegisterController extends BaseController
     {
         //设置过滤,防止接口被恶意使用
         $send_sms_key = str_replace('ip', $this->request->ip(), $this->send_ip_key);
+        dump($send_sms_key);
         $send_num = Redis::get($send_sms_key);
         dump($send_num);
         if (!empty($send_num) && $send_num >= $this->send_quota[1]) {
