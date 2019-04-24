@@ -290,7 +290,7 @@ class CommentController extends BaseController
         $device = $this->dealCommentDeviceInfo($device);
         //检查评论内容
         $content = $this->checkContent($content);
-        if(is_bool($content)){
+        if($content === false){
             Response::fail('发表失败');
         }
         //获取判断文档信息
