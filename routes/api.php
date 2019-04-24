@@ -68,7 +68,7 @@ Route::prefix('/v1')->group(function(){
     //发送短信验证码
     Route::post('/sendPhoneCode','Api\UserController@sendPhoneCode');
     //发送注册短信验证码
-    Route::post('/sendRegisterCode','Api\RegisterController@sendRegisterCode');
+    Route::post('/sendRegisterCode','Api\RegisterController@sendRegisterSms');
     //账号注册方法
     Route::post('/register','Api\RegisterController@register');
     //获取热门搜索
