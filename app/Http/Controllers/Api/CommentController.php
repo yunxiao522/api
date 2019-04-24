@@ -399,7 +399,7 @@ class CommentController extends BaseController
         $comment_key = Redis::get('comment_key');
         $comment_key_arr = json_decode($comment_key,true);
         foreach ($comment_key_arr as $value){
-            if(strpos($content,$value) === false){
+            if(strpos($content,$value) !== false){
                 return false;
             }
         }
