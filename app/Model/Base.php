@@ -90,9 +90,9 @@ class Base extends Model
      * @return string
      * Description 获取条件获取某一列数据
      */
-    public static function getField($where, $field)
+    public static function getField($where, $field ,$order = ['id','desc'])
     {
-        $res = self::where($where)->first($field);
+        $res = self::where($where)->orderBy($order[0],$order[1])->first($field);
         if (!isset($res[$field])) {
             return '';
         } else {

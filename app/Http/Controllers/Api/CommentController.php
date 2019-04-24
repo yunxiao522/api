@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Libs\sucaiz\Config;
+use App\Libs\sucaiz\Ip;
 use App\Model\Article;
 use App\Model\Comment;
 use App\Model\CommentOperate;
@@ -298,6 +299,7 @@ class CommentController extends BaseController
         if ($user_info['comment_status'] == 2) {
             Response::fail('账号被禁言');
         }
+        DB::beginTransaction();
         //添加评论表数据
         $comment_id = Comment::add([
             'aid'=>$aid,
@@ -316,9 +318,23 @@ class CommentController extends BaseController
             'device'=>$device,
             'city'=>''
         ]);
-        //获取评论的楼层数
-        $tier = $this->computeCommentTier($aid, $ppid);
-
+        if(!$comment_id){
+            Response::fail('发表失败');
+        }
+        //更新评论列表内容
+        $res = Comment::edit(['id'=>$comment_id],[
+            'city' => Ip::getIpCity($this->request->ip()),
+        ]);
+        if(!$res){
+            DB::rollBack();
+            Response::fail('发表失败');
+        }
+        //修改文档评论数量
+        Article::incr(['id'=>$aid],'comment_num');
+        //更新评论楼层数
+        Comment::edit(['id'=>$comment_id],['tier'=>$this->computeCommentTier($aid,$ppid)]);
+        DB::commit();
+        Response::success([],'','发表成功');
     }
 
     /**
@@ -332,7 +348,7 @@ class CommentController extends BaseController
         $tier_key = str_replace(['article', 'pid'], [$aid, $pid], $this->comment_tier_key);
         $tier = Redis::get($tier_key);
         if (empty($tier)) {
-            $tier = Comment::getField(['aid' => $aid, 'ppid' => $pid], ['tier']);
+            $tier = Comment::getField(['aid' => $aid, 'ppid' => $pid], 'tier',['tier','desc']);
             if (empty($tier)) {
                 $tier = 0;
             }
