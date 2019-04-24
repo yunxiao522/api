@@ -96,7 +96,7 @@ class CommentController extends BaseController
             $type = $this->order_type[1];
         }
         //查询被回复评论的信息
-        $comment_info = Comment::getOne(['id'=>$id,['infotm','<',$this->inform_num],'status'=>1],['face','uid','content','tier','praiser','oppose','city','device']);
+        $comment_info = Comment::getOne(['id'=>$id,['inform','<',$this->inform_num],'status'=>1],['face','uid','content','tier','praiser','oppose','city','device']);
         if(empty($comment_info)){
             Response::fail('评论不存在','',30001);
         }
