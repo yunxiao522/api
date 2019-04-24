@@ -7,11 +7,11 @@
  * 2017/11/30
  */
 
-namespace Aliyun\DySDKLite\Sms;
+namespace Aliyun\Sms;
 
 require_once "../SignatureHelper.php";
 
-use Aliyun\DySDKLite\SignatureHelper;
+use SignatureHelper;
 
 /**
  * 短信发送记录查询
