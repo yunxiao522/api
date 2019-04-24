@@ -288,6 +288,11 @@ class CommentController extends BaseController
         //处理设备型号信息
         $device = request('device');
         $device = $this->dealCommentDeviceInfo($device);
+        //检查评论内容
+        $content = $this->checkContent($content);
+        if(is_bool($content)){
+            Response::fail('发表失败');
+        }
         //获取判断文档信息
         $article_info = Article::getOne(['id' => $aid, 'is_delete' => 1, 'is_audit' => 1, 'draft' => 2], ['id', 'iscommend']);
         if (empty($article_info)) {
@@ -374,9 +379,31 @@ class CommentController extends BaseController
         Redis::inc($tier_key, 1, $this->comment_tier_key_ttl);
     }
 
+    /**
+     * @param $device
+     * @return mixed
+     * Description 处理评论设备信息
+     */
     private function dealCommentDeviceInfo($device)
     {
         return $device;
+    }
+
+    /**
+     * @param $content
+     * @return bool
+     * Description 检查评论内容中是否存在违规关键字
+     */
+    private function checkContent($content){
+        Redis::$db = 1;
+        $comment_key = Redis::get('comment_key');
+        $comment_key_arr = json_decode($comment_key,true);
+        foreach ($comment_key_arr as $value){
+            if(strpos($content,$value) === false){
+                return false;
+            }
+        }
+        return $content;
     }
 
     /**
