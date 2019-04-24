@@ -355,6 +355,7 @@ class CommentController extends BaseController
             Redis::set($tier_key, $tier + 1, $this->comment_tier_key_ttl);
         } else {
             $tier++;
+            Redis::inc($tier_key,1,$this->comment_tier_key_ttl);
         }
         return $tier;
     }
