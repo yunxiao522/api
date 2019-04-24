@@ -17,4 +17,9 @@ class Comment extends Base
     {
         parent::__construct($attributes);
     }
+
+    //获取楼层数
+    public static function getTier($where){
+        return self::where($where)->orderBy('tier','desc')->first('tier');
+    }
 }

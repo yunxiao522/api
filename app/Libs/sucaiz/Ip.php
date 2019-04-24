@@ -6,6 +6,7 @@ namespace App\Libs\sucaiz;
 
 class Ip
 {
+    //根据ip获取所在城市
     public static function getIpCity($ip){
         //组合url,获取数据
         $url="http://ip.taobao.com/service/getIpInfo.php?ip=$ip";
