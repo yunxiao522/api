@@ -63,7 +63,6 @@ class Sms
             // fixme 选填: 启用https
             // ,true
             );
-            dump($content);
         }catch (\Exception $exception){
             UserSms::edit(['id'=>$sms_id],['status'=>2]);
             Response::fail('发送失败');

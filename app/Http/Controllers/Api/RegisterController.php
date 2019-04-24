@@ -129,7 +129,8 @@ class RegisterController extends BaseController
             'sex' => 1,
             'description' => '',
             'signature' => '',
-            'face' => UserController::getFace()
+            'face' => UserController::getFace(),
+            'token'=>md5(time().$phone)
         ];
         $res = User::add($data);
         if ($res) {
