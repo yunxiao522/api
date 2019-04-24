@@ -53,6 +53,12 @@ class Redis
         return self::$redis->set($key,$value,$ttl);
     }
 
+    /**
+     * @param $key
+     * @param int $num
+     * @param $ttl
+     * Description 增加莫个key的值
+     */
     public static function inc($key,$num = 1,$ttl){
         self::getRedis();
         if(empty(self::get($key))){

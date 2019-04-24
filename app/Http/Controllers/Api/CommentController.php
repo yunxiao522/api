@@ -27,6 +27,10 @@ class CommentController extends BaseController
     protected $order_type = [1 => ['id', 'desc'], 2 => ['id', 'asc']];
     //评论举报极值
     protected $inform_num;
+    //评论楼层存储在redis中的key格式
+    protected $comment_tier_key = 'comment_tier_article_pid_key';
+    //评论楼层储存在redis中的有效时间
+    protected $comment_tier_key_ttl = 86400;
 
     public function __construct(Request $request)
     {
@@ -69,8 +73,8 @@ class CommentController extends BaseController
             $list['data'][$key]['reply_count'] = 0;
             if (!empty($list['data'][$key]['reply'])) {
                 $list['data'][$key]['reply_count'] = Comment::getCount(['ppid' => $value['id']], 'id');
-                foreach ($list['data'][$key]['reply'] as $k => $v){
-                    $list['data'][$key]['reply'][$k]= $this->dealCommentListInfo($v);
+                foreach ($list['data'][$key]['reply'] as $k => $v) {
+                    $list['data'][$key]['reply'][$k] = $this->dealCommentListInfo($v);
                 }
             }
         }
@@ -117,18 +121,19 @@ class CommentController extends BaseController
      * @return mixed
      * Description 处理评论列表数据信息
      */
-    private function dealCommentListInfo($list_info){
+    private function dealCommentListInfo($list_info)
+    {
         $list_info['user_info'] = User::getOne(['id' => $list_info['uid']], ['level', 'nickname']);
         $list_info['create_time'] = date('Y-m-d H:i:s', $list_info['create_time']);
-        $oppose_status = $this->checkUserCommentOperateStatus($list_info['id'],2);
-        $praiser_status = $this->checkUserCommentOperateStatus($list_info['id'],1);
+        $oppose_status = $this->checkUserCommentOperateStatus($list_info['id'], 2);
+        $praiser_status = $this->checkUserCommentOperateStatus($list_info['id'], 1);
         $list_info['operate_status'] = [
-            'oppose'=>$oppose_status,
-            'praiser'=>$praiser_status
+            'oppose' => $oppose_status,
+            'praiser' => $praiser_status
         ];
-        $list_info['oppose'] = $oppose_status ? '取消反对('.$list_info['oppose'].')' : '反对('.$list_info['oppose'].')';
-        $list_info['praiser'] = $praiser_status ? '取消支持('.$list_info['praiser'].')' : '支持('.$list_info['praiser'].')';
-        $list_info['face'] = strpos($list_info['face'],'http') === false ? config::get('cfg_hostsite').$list_info['face'] : $list_info['face'];
+        $list_info['oppose'] = $oppose_status ? '取消反对(' . $list_info['oppose'] . ')' : '反对(' . $list_info['oppose'] . ')';
+        $list_info['praiser'] = $praiser_status ? '取消支持(' . $list_info['praiser'] . ')' : '支持(' . $list_info['praiser'] . ')';
+        $list_info['face'] = strpos($list_info['face'], 'http') === false ? config::get('cfg_hostsite') . $list_info['face'] : $list_info['face'];
         return $list_info;
     }
 
@@ -147,10 +152,10 @@ class CommentController extends BaseController
             Response::fail($validator->errors()->first());
         }
         $res = $this->operate(request('id'), 1);
-        if(is_string($res)){
+        if (is_string($res)) {
             Response::fail($res);
         }
-        Response::success($res,'','投票成功');
+        Response::success($res, '', '投票成功');
     }
 
     /**
@@ -168,10 +173,10 @@ class CommentController extends BaseController
             Response::fail($validator->errors()->first());
         }
         $res = $this->operate(request('id'), 2);
-        if(is_string($res)){
+        if (is_string($res)) {
             Response::fail($res);
         }
-        Response::success($res,'','投票成功');
+        Response::success($res, '', '投票成功');
     }
 
     /**
@@ -200,7 +205,7 @@ class CommentController extends BaseController
         ];
         $count = CommentOperate::getField($where, 'uid');
         if (!empty($count)) {
-            return'你已经投过票了';
+            return '你已经投过票了';
         }
         //判断是否有过相同类型操作
         $where = [
@@ -253,7 +258,105 @@ class CommentController extends BaseController
      */
     public function push()
     {
+        $uid = Auth::getUserId();
+        $aid = request('aid');
+        if (empty($aid) || !is_numeric($aid)) {
+            Response::fail('参数错误');
+        }
+        $content = request('content');
+        if (empty($content)) {
+            Response::fail('评论内容不能为空');
+        }
+        if(mb_strlen($content,'UTF-8')>500){
+            Response::fail('评论的字数太多了');
+        }
+        $pid = request('pid');
+        if (!empty($pid) && !is_numeric($pid)) {
+            Response::fail('参数错误');
+        }
+        $pid = empty($pid) ? 0 : $pid;
+        $ppid = 0;
+        if (!empty($pid)) {
+            $ppid = Comment::getField(['id' => $pid], 'ppid');
+            if ($ppid === '') {
+                Response::fail('回复的评论不存在');
+            }
+        }
+        //处理设备型号信息
+        $device = request('device');
+        $device = $this->dealCommentDeviceInfo($device);
+        //获取判断文档信息
+        $article_info = Article::getOne(['id' => $aid, 'is_delete' => 1, 'is_audit' => 1, 'draft' => 2], ['id', 'iscommend']);
+        if (empty($article_info)) {
+            Response::fail('文档不存在');
+        }
+        if ($article_info['iscomment'] == 2) {
+            Response::fail('文档不允许发表评论');
+        }
+        //获取判断用户账户发言状态
+        $user_info = User::getOne(['id' => $uid], ['face', 'comment_status']);
+        if ($user_info['comment_status'] == 2) {
+            Response::fail('账号被禁言');
+        }
+        //添加评论表数据
+        $comment_id = Comment::add([
+            'aid'=>$aid,
+            'face'=>$user_info['face'],
+            'uid'=>$uid,
+            'content'=>$content,
+            'tier'=>0,
+            'ppid'=>$ppid,
+            'parent_id'=>$pid,
+            'praiser'=>0,
+            'oppose'=>0,
+            'inform'=>0,
+            'status'=>1,
+            'create_time'=>time(),
+            'comment_ip'=>$this->request->ip(),
+            'device'=>$device,
+            'city'=>''
+        ]);
+        //获取评论的楼层数
+        $tier = $this->computeCommentTier($aid, $ppid);
 
+    }
+
+    /**
+     * @param $aid
+     * @param $pid
+     * @return mixed|string
+     * Description 发表评论时对评论楼层的处理
+     */
+    private function computeCommentTier($aid, $pid)
+    {
+        $tier_key = str_replace(['article', 'pid'], [$aid, $pid], $this->comment_tier_key);
+        $tier = Redis::get($tier_key);
+        if (empty($tier)) {
+            $tier = Comment::getField(['aid' => $aid, 'ppid' => $pid], ['tier']);
+            if (empty($tier)) {
+                $tier = 0;
+            }
+            Redis::set($tier_key, $tier + 1, $this->comment_tier_key_ttl);
+        } else {
+            $tier++;
+        }
+        return $tier;
+    }
+
+    /**
+     * @param $aid
+     * @param $pid
+     * Description 更新缓存中的评论楼层数
+     */
+    private function updateCacheTier($aid, $pid)
+    {
+        $tier_key = str_replace(['article', 'pid'], [$aid, $pid], $this->comment_tier_key);
+        Redis::inc($tier_key, 1, $this->comment_tier_key_ttl);
+    }
+
+    private function dealCommentDeviceInfo($device)
+    {
+        return $device;
     }
 
     /**
