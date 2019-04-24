@@ -7,7 +7,7 @@
  */
 
 namespace App\Libs;
-use Aliyun\Sms\SignatureHelper;
+use App\Libs\Aliyun\Sms\SignatureHelper;
 use App\Http\Controllers\Api\Response;
 use App\Model\UserSms;
 
