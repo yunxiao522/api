@@ -18,6 +18,8 @@ Route::prefix('/v1')->group(function(){
         Route::post('/user/perfectAccount','Api\RegisterController@perfectAccount');
         //获取会员信息
         Route::get('/user/getInfo','Api\UserController@getUserInfo');
+        //获取会员昵称
+        Route::get('/user/getNickName','Api\UserController@getNickName');
         //修改会员信息
         Route::put('/user/editInfo','Api\UserController@editUserInfo');
         //获取搜索记录
