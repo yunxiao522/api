@@ -95,6 +95,11 @@ class CommentController extends BaseController
         if (empty($type) || !isset($this->order_type[$type])) {
             $type = $this->order_type[1];
         }
+        //查询被回复评论的信息
+        $comment_info = Comment::getOne(['id'=>$id,['infotm','<',$this->inform_num],'status'=>1],['face','uid','content','tier','praiser','oppose','city','device']);
+        if(empty($comment_info)){
+            Response::fail('评论不存在','',30001);
+        }
         $aid = request('aid');
         if (empty($aid) || !is_numeric($aid)) {
             Response::fail('参数错误');
@@ -114,6 +119,10 @@ class CommentController extends BaseController
             Response::success([], '', '文档被设置为禁止评论', 20005);
         }
         $list = Comment::getList(['aid' => $aid, 'ppid' => $id, ['inform', '<', $this->inform_num]], ['*'], $this->limit, $type);
+        //处理列表数据
+        foreach ($list['data'] as $key => $value){
+            $list['data'][$key] = $this->dealCommentDeviceInfo($value);
+        }
         Response::success($list, '', 'get data success');
     }
 
