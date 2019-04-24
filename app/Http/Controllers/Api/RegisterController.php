@@ -64,7 +64,7 @@ class RegisterController extends BaseController
         Redis::set($send_phone_key, $code, $this->send_sms_ttl);
 
         $res = Sms::sendSms($phone,
-            'SMS_133000964',
+            '素材站',
             $this->send_code,
             ['code' => $code],
             [
