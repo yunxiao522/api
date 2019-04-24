@@ -281,6 +281,8 @@ class CommentController extends BaseController
             $ppid = Comment::getField(['id' => $pid], 'ppid');
             if ($ppid === '') {
                 Response::fail('回复的评论不存在');
+            }else if($ppid === 0){
+                $ppid = $pid;
             }
         }
         //处理设备型号信息
