@@ -42,7 +42,6 @@ class Sms
         if(!empty($params["TemplateParam"]) && is_array($params["TemplateParam"])) {
             $params["TemplateParam"] = json_encode($params["TemplateParam"], JSON_UNESCAPED_UNICODE);
         }
-        dump($accessKeyId,$accessKeySecret);
         // 初始化SignatureHelper实例用于设置参数，签名以及发送请求
         $helper = new SignatureHelper();
         $data['phone'] = $phone;
@@ -64,6 +63,7 @@ class Sms
             // fixme 选填: 启用https
             // ,true
             );
+            dump($content);
         }catch (\Exception $exception){
             UserSms::edit(['id'=>$sms_id],['status'=>2]);
             Response::fail('发送失败');
