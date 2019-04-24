@@ -38,6 +38,7 @@ class Redis
      */
     public static function get($key){
         self::getRedis();
+        dump(self::$redis);
         return self::$redis->get($key);
     }
 
