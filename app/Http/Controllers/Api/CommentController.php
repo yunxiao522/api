@@ -351,6 +351,7 @@ class CommentController extends BaseController
         $tier = Redis::get($tier_key);
         if (empty($tier)) {
             $tier = Comment::getTier(['aid' => $aid, 'ppid' => $pid]);
+            dump($tier);
             if (empty($tier)) {
                 $tier = 0;
             }
