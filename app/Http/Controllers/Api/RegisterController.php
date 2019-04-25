@@ -172,7 +172,7 @@ class RegisterController extends BaseController
         //更新信息
         $res = User::edit(['id' => $user_info['id']], $data);
         if ($res) {
-            Response::success('修改信息成功');
+            Response::success(['refresh_token'=>Auth::getMakeRefreshToken($token)],'','修改成功');
         } else {
             Response::fail('修改信息失败');
         }

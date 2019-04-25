@@ -187,14 +187,24 @@ class Auth extends BaseController
         if (empty($user_info['nickname']) && 1 == $user_info['status']) {
             Response::success(['token'=>$user_info['token']],'The account information is incomplete', '', 10012);
         }
-        $token = Hash::make($user_info['token']);
-        $refresh_token_key = str_replace('token', $token, self::$refresh_token_key);
-        Redis::set($refresh_token_key, $user_info['token'], self::$refresh_token_ttl);
+        $token = self::getMakeRefreshToken($user_info['token']);
         Redis::inc($token_quota_key, 1, self::$quota[0]);
         Response::setHeaderCode();
         Response::success([
             'refresh_token' => $token,
             'expirat_in' => self::$refresh_token_ttl
         ], '', 'get refresh_token success');
+    }
+
+    /**
+     * @param $user_token
+     * @return string
+     * Description 生成保存会员账号的refresh_token。方便在外部生成获取
+     */
+    public static function getMakeRefreshToken($user_token){
+        $token = Hash::make($user_token);
+        $refresh_token_key = str_replace('token', $token, self::$refresh_token_key);
+        Redis::set($refresh_token_key, $user_token, self::$refresh_token_ttl);
+        return $token;
     }
 }
