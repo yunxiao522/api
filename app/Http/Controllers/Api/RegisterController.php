@@ -135,7 +135,7 @@ class RegisterController extends BaseController
         ];
         $res = User::add($data);
         if ($res) {
-            Response::success([], '', '注册成功,请完善账户信息');
+            Response::success(['token'=>$data['token']], '', '注册成功,请完善账户信息');
         } else {
             Response::fail('注册失败');
         }
