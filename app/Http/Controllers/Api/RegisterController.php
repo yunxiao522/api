@@ -166,10 +166,9 @@ class RegisterController extends BaseController
             Response::fail('参数错误', '');
         }
         //检查验证账号信息
-        $user_info = User::getField(['token'=>$token],'id');
+        $user_info = User::getOne(['token'=>$token],'id');
         $data['alter_time'] = time();
         $data['status'] = 2;
-        dump($user_info,$data);
         //更新信息
         $res = User::edit(['id' => $user_info['id']], $data);
         if ($res) {
