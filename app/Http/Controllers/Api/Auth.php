@@ -185,8 +185,7 @@ class Auth extends BaseController
         }
         //判断账号状态
         if (empty($user_info['nickname']) && 1 == $user_info['status']) {
-            Response::setHeaderCode(406, 'The account information is incomplete');
-            Response::fail('The account information is incomplete', '', 10012,['token'=>$user_info['token']]);
+            Response::success(['token'=>$user_info['token']],'The account information is incomplete', '', 10012);
         }
         $token = Hash::make($user_info['token']);
         $refresh_token_key = str_replace('token', $token, self::$refresh_token_key);
