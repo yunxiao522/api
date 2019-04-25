@@ -33,14 +33,14 @@ class Response extends BaseController
     }
 
     //返回请求失败
-    public static function fail($msg = '',$url = '',$code = 1){
+    public static function fail($msg = '',$url = '',$code = 1,$data = []){
         $m = [
             'msg'=>$msg,
             'status'=>self::$fail,
             'success'=>false,
             'url'=>$url,
             'code'=>$code,
-            'data'=>'',
+            'data'=>$data,
         ];
         self::send_msg($m);
     }
