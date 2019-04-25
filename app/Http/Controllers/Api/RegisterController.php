@@ -63,17 +63,18 @@ class RegisterController extends BaseController
         $code = Sms::getCode();
         Redis::set($send_phone_key, $code, $this->send_sms_ttl);
 
-        $res = Sms::sendSms($phone,
-            '素材站',
-            $this->send_code,
-            ['code' => $code],
-            [
-                'uid' => 0,
-                'title' => '手机短信激活码',
-                'content' => "您的验证码为$code ，请于10分钟内正确输入，如非本人操作，请忽略此短信。"
-            ]);
+//        $res = Sms::sendSms($phone,
+//            '素材站',
+//            $this->send_code,
+//            ['code' => $code],
+//            [
+//                'uid' => 0,
+//                'title' => '手机短信激活码',
+//                'content' => "您的验证码为$code ，请于10分钟内正确输入，如非本人操作，请忽略此短信。"
+//            ]);
+        $res = true;
         if ($res) {
-            Response::success([], '', '发送成功');
+            Response::success([], '', '发送成功,'.$code);
         } else {
             Response::fail('发送失败');
         }
