@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Model\LogLogin;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -177,7 +178,7 @@ class Auth extends BaseController
         } else {
             $where['username'] = $user;
         }
-        $user_info = User::getOne($where, ['token', 'status', 'nickname']);
+        $user_info = User::getOne($where, ['id','token', 'status', 'nickname']);
         //检查账号是否存在
         if (empty($user_info)) {
             Response::setHeaderCode(401, 'auth fail');
@@ -189,6 +190,15 @@ class Auth extends BaseController
         }
         $token = self::getMakeRefreshToken($user_info['token']);
         Redis::inc($token_quota_key, 1, self::$quota[0]);
+        $method = empty(request('method'))? '' :request('method');
+        //添加登录日志
+        LogLogin::add([
+            'uid'=>$user_info['id'],
+            'login_time'=>time(),
+            'login_ip'=>$this->request->ip(),
+            'type'=>2,
+            'method'=>$method
+        ]);
         Response::setHeaderCode();
         Response::success([
             'refresh_token' => $token,
