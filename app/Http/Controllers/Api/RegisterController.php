@@ -169,6 +169,7 @@ class RegisterController extends BaseController
         $user_info = User::getField(['token'=>$token],'id');
         $data['alter_time'] = time();
         $data['status'] = 2;
+        dump($user_info,$data);
         //更新信息
         $res = User::edit(['id' => $user_info['id']], $data);
         if ($res) {
