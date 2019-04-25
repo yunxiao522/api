@@ -197,6 +197,7 @@ class Auth extends BaseController
             'login_time'=>time(),
             'login_ip'=>$this->request->ip(),
             'type'=>2,
+            'browser'=>getBrowserInfo(),
             'method'=>$method
         ]);
         Response::setHeaderCode();
