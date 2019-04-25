@@ -161,14 +161,16 @@ class RegisterController extends BaseController
         if (mb_strlen($data['realname'], 'UTF-8') > 20) {
             Response::fail('真实姓名不能超过20个字');
         }
-        $uid = Auth::getUserId();
-        if (!$uid) {
-            Response::fail('会员账号不存在', '', 10011);
+        $token = request('token');
+        if (empty($token)) {
+            Response::fail('参数错误', '');
         }
+        //检查验证账号信息
+        $user_info = User::getField(['token'=>$token],'id');
         $data['alter_time'] = time();
         $data['status'] = 2;
         //更新信息
-        $res = User::edit(['id' => $uid], $data);
+        $res = User::edit(['id' => $user_info['id']], $data);
         if ($res) {
             Response::success('修改信息成功');
         } else {

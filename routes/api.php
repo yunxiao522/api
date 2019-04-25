@@ -14,8 +14,6 @@ Route::prefix('/v1')->group(function(){
     Route::middleware("apiauth::checkAuth")->group(function (){
         //文档、评论的收藏操作
         Route::put('/article/collection/{id}','Api\LikeController@collection')->where(['id'=>'[0-9]+']);
-        //完善账号信息
-        Route::post('/user/perfectAccount','Api\RegisterController@perfectAccount');
         //获取会员信息
         Route::get('/user/getInfo','Api\UserController@getUserInfo');
         //获取会员昵称
@@ -87,6 +85,8 @@ Route::prefix('/v1')->group(function(){
     Route::get('/article/tagArticleList','Api\ArticleController@getTagArticleList');
     //获取广告代码
     Route::get('/ad/getCode/{id}','Api\AdvertController@getAdCode')->where(['id'=>'[0-9]+']);
+    //完善账号信息
+    Route::put('/user/perfectAccount','Api\RegisterController@perfectAccount');
     //获取下载链接
     Route::get('/down/getDownUrl','Api\DownController@getDownUrl');
 });
