@@ -158,10 +158,16 @@ class Auth extends BaseController
             Response::setHeaderCode(403,'refresh too fast');
             Response::send_msg('refresh too fast');
         }
-        $user_token = User::getField([
-            'username'=>$user,
-            'password'=>$pass
-        ],'token');
+        //根据账户类型构建查询条件
+        $where = ['password'=>$pass];
+        if(is_phone($user)){
+            $where['phone'] = $user;
+        }else if(is_email($user)){
+            $where['email'] = $user;
+        }else{
+            $where['username'] = $user;
+        }
+        $user_token = User::getField($where,'token');
         if(empty($user_token)){
             Response::setHeaderCode(401,'auth fail');
             Response::fail('auth fail');
