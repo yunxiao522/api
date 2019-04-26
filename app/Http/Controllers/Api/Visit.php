@@ -162,7 +162,7 @@ class Visit extends BaseController
         $time = date('Y',$pubdate);
         $where = [
             'type'=>1,
-            'time'=>$time
+            'time'=>(string)$time
         ];
         $p_id = ArticleHot::getField($where,'id');
         if(empty($p_id)){
