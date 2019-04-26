@@ -149,12 +149,12 @@ class Visit extends BaseController
      */
     private function addArticleHotClick(){
         $pubdate = $this->article_info['pubdate'];
-        dump($pubdate);die;
         $time = date('Y',$pubdate);
         $where = [
             'type'=>1,
             'time'=>$time
         ];
+        dump($where);die;
         $p_id = ArticleHot::getField($where,'id');
         dump($p_id);die;
         if(empty($hot_id)){
