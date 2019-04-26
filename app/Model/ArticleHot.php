@@ -11,6 +11,7 @@ namespace App\Model;
 
 class ArticleHot extends Base
 {
+    public $table = 'article_hot';
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
