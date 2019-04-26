@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Api;
 use App\Model\Article;
 use App\Model\ArticleHot;
 use App\Model\Click;
+use App\Model\Column;
 use App\Model\LogVisit;
 use Illuminate\Http\Request;
 
@@ -44,23 +45,30 @@ class Visit extends BaseController
         if(empty($device)){
             $device = getDeviceModel();
         }
-//        $this->addClick();
-
         //处理参数数据
         if($type == 1){
             $this->article_info = Article::getOne(['id'=>$id],['id','column_id','pubdate']);
-//            $this->addArticleClick();
-//            $this->addArticleHotClick();
+            if(empty($this)){
+                Response::fail('');
+            }
+            $this->addClick();
+            $this->addArticleClick();
+            $this->addArticleHotClick();
             $this->addLogVisit($this->request->session_id,$this->article_info['column_id'],$this->request->id,$url,$source,$device,$type);
         }else if($type == 2){
+            $column_info = Column::getField(['id'=>$this->request->id],'id');
+            if(empty($column_info)){
+                Response::fail('');
+            }
+            $this->addClick();
             $this->addLogVisit($this->request->session_id,$this->request->id,0,$url,$source,$device,$type);
         }else if($type == 3){
+            $this->addClick();
             $this->addLogVisit($this->request->session_id,0,0,$url,$source,$device,$type);
         }else if($type == 4){
+            $this->addClick();
             $this->addLogVisit($this->request->session_id,0,0,$url,$source,$device,$type);
         }
-
-
     }
     /**
      * Description 修改网站点击数
