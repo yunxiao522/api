@@ -196,7 +196,7 @@ class Auth extends BaseController
             'uid'=>$user_info['id'],
             'login_time'=>time(),
             'login_ip'=>$this->request->ip(),
-            'type'=>2,
+            'type'=>1,
             'browser'=>getBrowserInfo(),
             'method'=>$method
         ]);
