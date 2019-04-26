@@ -178,7 +178,7 @@ class Visit extends BaseController
         }
         $where = [
             'type'=>2,
-            'time'=>date('M',$pubdate),
+            'time'=>date('m',$pubdate),
             'parent_id'=>$p_id
         ];
         $hot_id = ArticleHot::getField($where,'id');
