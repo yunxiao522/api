@@ -13,6 +13,8 @@ use App\Model\ArticleHot;
 use App\Model\Click;
 use App\Model\Column;
 use App\Model\LogVisit;
+use App\Model\Tag;
+use App\Model\TagList;
 use Illuminate\Http\Request;
 
 class Visit extends BaseController
@@ -54,6 +56,7 @@ class Visit extends BaseController
             $this->addClick();
             $this->addArticleClick();
             $this->addArticleHotClick();
+            $this->addArticleTagClick();
             $this->addLogVisit($this->request->session_id,$this->article_info['column_id'],$this->request->id,$url,$source,$device,$type);
         }else if($type == 2){
             $column_info = Column::getField(['id'=>$this->request->id],'id');
@@ -189,6 +192,24 @@ class Visit extends BaseController
             ]);
         }else{
             ArticleHot::incr($where,'click',1);
+        }
+    }
+
+    /**
+     * Description 修改文档tag标签点击量
+     */
+    private function addArticleTagClick(){
+        $article_id = $this->article_info['id'];
+        //组合查询条件,查询文档内的tag标签列表
+        $where = ['article_id'=>$article_id];
+        $tag_list = TagList::getALL($where,'tag_id');
+        //循环修改tag表点击数量
+        foreach($tag_list as $value){
+            $where = ['id'=>$value['tag_id']];
+            Tag::incr($where,'count');
+            Tag::incr($where,'weekcc');
+            Tag::incr($where,'daycc');
+            Tag::incr($where,'monthcc');
         }
     }
 }
