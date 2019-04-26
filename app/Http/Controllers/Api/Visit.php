@@ -149,6 +149,7 @@ class Visit extends BaseController
      */
     private function addArticleHotClick(){
         $pubdate = $this->article_info['pubdate'];
+        dump($pubdate);die;
         $time = date('Y',$pubdate);
         $where = [
             'type'=>1,
