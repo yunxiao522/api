@@ -44,12 +44,12 @@ class Visit extends BaseController
         if(empty($device)){
             $device = getDeviceModel();
         }
-        $this->addClick();
+//        $this->addClick();
 
         //处理参数数据
         if($type == 1){
             $this->article_info = Article::getOne(['id'=>$id],['id','column_id','pubdate']);
-            $this->addArticleClick();
+//            $this->addArticleClick();
             $this->addArticleHotClick();
             dump($type);die;
             $this->addLogVisit($this->request->session_id,$this->article_info['column_id'],$this->request->id,$url,$source,$device,$type);
