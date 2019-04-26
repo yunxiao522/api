@@ -155,7 +155,6 @@ class Visit extends BaseController
             'time'=>$time
         ];
         $p_id = ArticleHot::getField($where,'id');
-        dump($p_id);die;
         if(empty($hot_id)){
             $p_id = ArticleHot::add([
                 'type'=>1,
