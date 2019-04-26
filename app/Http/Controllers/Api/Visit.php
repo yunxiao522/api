@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 class Visit extends BaseController
 {
     private $article_info;
+    private $visit_type = [1=>'文档',2=>'列表',3=>'其他'];
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -27,6 +28,9 @@ class Visit extends BaseController
      */
     public function visit(){
         $id = $this->request->id;
+        if(empty($id) || !is_numeric($id)){
+            Response::fail('');
+        }
         dump($id);
         die;
         $this->article_info = Article::getOne(['id'=>$this->request->id],'*');
