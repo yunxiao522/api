@@ -53,7 +53,7 @@ class Visit extends BaseController
 //            $this->addArticleHotClick();
             $this->addLogVisit($this->request->session_id,$this->article_info['column_id'],$this->request->id,$url,$source,$device,$type);
         }else if($type == 2){
-            $this->addLogVisit($this->request->session_id,0,$this->request->id,$url,$source,$device,$type);
+            $this->addLogVisit($this->request->session_id,$this->request->id,0,$url,$source,$device,$type);
         }else if($type == 3){
             $this->addLogVisit($this->request->session_id,0,0,$url,$source,$device,$type);
         }else if($type == 4){
