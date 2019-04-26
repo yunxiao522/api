@@ -26,6 +26,9 @@ class Visit extends BaseController
      *Description 访问记录接口
      */
     public function visit(){
+        $id = $this->request->id;
+        dump($id);
+        die;
         $this->article_info = Article::getOne(['id'=>$this->request->id],'*');
         $this->addClick();
         $this->addArticleClick();
@@ -68,15 +71,16 @@ class Visit extends BaseController
      * Description 添加访问记录
      */
     private function addLogVisit($session_id ,$user_id ,$url){
-        $this->moxorySpider();
-        LogVisit::add([
-            'session_id'=>$session_id,
-            'ip'=>$this->request->getClientIp(),
-            'user_id'=>$user_id,
-            'column_id'=>$this->article_info['column_id'],
-            'article_id'=>$this->article_info['id'],
-            'url'=>$url
-        ]);
+        if($this->moxorySpider()){
+            LogVisit::add([
+                'session_id'=>$session_id,
+                'ip'=>$this->request->getClientIp(),
+                'user_id'=>$user_id,
+                'column_id'=>$this->article_info['column_id'],
+                'article_id'=>$this->article_info['id'],
+                'url'=>$url
+            ]);
+        }
     }
 
     /**
@@ -102,8 +106,9 @@ class Visit extends BaseController
         elseif (strpos($useragent,'slurp') !== false){$bot = '雅虎';}
         elseif (strpos($useragent,'bot') !== false){$bot = '其它蜘蛛';}
         if(isset($bot)){
-            die;
+            return false;
         }
+        return true;
     }
 
     /**
