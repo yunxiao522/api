@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 class Visit extends BaseController
 {
     private $article_info;
-    private $visit_type = [1=>'文档',2=>'列表',3=>'其他'];
+    private $visit_type = [1=>'文档',2=>'列表',3=>'首页',4=>'其他'];
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -31,13 +31,35 @@ class Visit extends BaseController
         if(empty($id) || !is_numeric($id)){
             Response::fail('');
         }
-        dump($id);
-        die;
-        $this->article_info = Article::getOne(['id'=>$this->request->id],'*');
+        $type = $this->request->type;
+        if(!empty($type) && !isset($this->visit_type[$type])){
+            $type = 3;
+        }
+        $url = $this->request->url;
+        if(empty($url)){
+            Response::fail('');
+        }
+        $source = $this->request->source;
+        $device = $this->request->device;
+        if(empty($device)){
+            $device = getDeviceModel();
+        }
         $this->addClick();
-        $this->addArticleClick();
-        $this->addLogVisit($this->request->session_id,$this->request->user_id,$this->request->url);
-        $this->addArticleHotClick();
+        //处理参数数据
+        if($type == 1){
+            $this->article_info = Article::getOne(['id'=>$id],['id','column_id','pubdate']);
+            $this->addArticleClick();
+            $this->addArticleHotClick();
+            $this->addLogVisit($this->request->session_id,$this->article_info['column_id'],$this->request->id,$url,$source,$device,$type);
+        }else if($type == 2){
+            $this->addLogVisit($this->request->session_id,0,$this->request->id,$url,$source,$device,$type);
+        }else if($type == 3){
+            $this->addLogVisit($this->request->session_id,0,0,$url,$source,$device,$type);
+        }else if($type == 4){
+            $this->addLogVisit($this->request->session_id,0,0,$url,$source,$device,$type);
+        }
+
+
     }
     /**
      * Description 修改网站点击数
@@ -74,15 +96,20 @@ class Visit extends BaseController
      * @param $url
      * Description 添加访问记录
      */
-    private function addLogVisit($session_id ,$user_id ,$url){
+    private function addLogVisit($session_id ,$column_id,$article_id,$url,$source,$device,$type){
+        $uid = Auth::getUserId() ? Auth::getUserId() : 0;
         if($this->moxorySpider()){
             LogVisit::add([
                 'session_id'=>$session_id,
                 'ip'=>$this->request->getClientIp(),
-                'user_id'=>$user_id,
-                'column_id'=>$this->article_info['column_id'],
-                'article_id'=>$this->article_info['id'],
-                'url'=>$url
+                'user_id'=>$uid,
+                'column_id'=>$column_id,
+                'article_id'=>$article_id,
+                'url'=>$url,
+                'source'=>$source,
+                'device'=>$device,
+                'type'=>$type,
+                'create_time'=>time()
             ]);
         }
     }
