@@ -50,8 +50,9 @@ class Visit extends BaseController
         if($type == 1){
             $this->article_info = Article::getOne(['id'=>$id],['id','column_id','pubdate']);
             $this->addArticleClick();
-            $this->addArticleHotClick();
             dump($type);die;
+            $this->addArticleHotClick();
+
             $this->addLogVisit($this->request->session_id,$this->article_info['column_id'],$this->request->id,$url,$source,$device,$type);
         }else if($type == 2){
             $this->addLogVisit($this->request->session_id,0,$this->request->id,$url,$source,$device,$type);
