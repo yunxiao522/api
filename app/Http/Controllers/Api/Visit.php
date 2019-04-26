@@ -171,7 +171,7 @@ class Visit extends BaseController
             'time'=>date('M',$pubdate),
             'parent_id'=>$p_id
         ];
-        $hot_id = ArticleHot::getOne($where,'id');
+        $hot_id = ArticleHot::getField($where,'id');
         if(empty($hot_id)){
             ArticleHot::add([
                 'type'=>2,
